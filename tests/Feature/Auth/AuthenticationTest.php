@@ -6,8 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('login screen can be rendered', function () {
-    $response = $this->get('/');
+it('redirect to login screen', function () {
+    $response = $this->followingRedirects()->get('/');
 
     $response->assertStatus(200);
 });
