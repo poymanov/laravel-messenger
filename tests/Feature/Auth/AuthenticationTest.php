@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('redirect to login screen', function () {
-    $response = $this->followingRedirects()->get('/');
+    $response = $this->followingRedirects()->get(routeBuilderHelper()->common->home());
 
     $response->assertStatus(200);
 });
@@ -15,8 +15,8 @@ it('redirect to login screen', function () {
 it('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 
-    $response = $this->post('/login', [
-        'email' => $user->email,
+    $response = $this->post(routeBuilderHelper()->auth->login(), [
+        'email'    => $user->email,
         'password' => 'password',
     ]);
 
@@ -27,8 +27,8 @@ it('users can authenticate using the login screen', function () {
 it('users can not authenticate with invalid password', function () {
     $user = User::factory()->create();
 
-    $this->post('/login', [
-        'email' => $user->email,
+    $this->post(routeBuilderHelper()->auth->login(), [
+        'email'    => $user->email,
         'password' => 'wrong-password',
     ]);
 

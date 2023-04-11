@@ -1,7 +1,7 @@
 <script setup>
-import {ref} from 'vue';
-import HeaderNavigation from '@/Layouts/Common/HeaderNavigation.vue';
 
+import HeaderNavigation from '@/Layouts/Common/HeaderNavigation.vue';
+import AddChat from '@/Components/AddChat.vue';
 
 </script>
 
@@ -14,6 +14,7 @@ import HeaderNavigation from '@/Layouts/Common/HeaderNavigation.vue';
                 <div class="flex-1 flex flex-col">
                     <main class="flex-grow flex flex-row min-h-0">
                         <section class="flex flex-col flex-none overflow-auto w-24 hover:w-64 group lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
+                            <AddChat />
                             <div class="contacts p-2 flex-1 overflow-y-scroll">
                             </div>
                         </section>
