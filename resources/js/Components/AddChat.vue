@@ -36,7 +36,7 @@ function openModal() {
 </script>
 
 <template>
-    <div class="header p-4 flex flex-row justify-between items-center flex-none border-right border-gray-200 border-r-2">
+    <div class="header p-2 flex flex-row justify-between items-center flex-none">
         <a href="#" @click="openModal" class="ml-auto text-white block rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 hidden md:block group-hover:block">
             <svg viewBox="0 0 24 24" class="w-full h-full fill-current">
                 <path
