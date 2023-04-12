@@ -2,6 +2,8 @@
 
 namespace Tests\Helpers;
 
+use Tests\Helpers\ModelBuilder\ChatBuilder;
+use Tests\Helpers\ModelBuilder\ChatUserBuilder;
 use Tests\Helpers\ModelBuilder\UserBuilder;
 
 class ModelBuilderHelper
@@ -10,9 +12,15 @@ class ModelBuilderHelper
 
     public UserBuilder $user;
 
+    public ChatBuilder $chat;
+
+    public ChatUserBuilder $chatUser;
+
     public function __construct()
     {
-        $this->user = new UserBuilder();
+        $this->user     = new UserBuilder();
+        $this->chat     = new ChatBuilder();
+        $this->chatUser = new ChatUserBuilder();
     }
 
     /**

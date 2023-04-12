@@ -23,4 +23,12 @@ class UserRepository implements UserRepositoryContract
 
         return $this->userDtoFactoryContract->createFromModels($users);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isExistsById(int $id): bool
+    {
+        return User::whereId($id)->exists();
+    }
 }

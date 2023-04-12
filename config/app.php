@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\ChatServiceProvider;
+use App\Providers\ChatUserServiceProvider;
 use App\Providers\UserServiceProvider;
 use Illuminate\Support\Facades\Facade;
 
@@ -195,7 +197,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        UserServiceProvider::class
+        UserServiceProvider::class,
+        ChatServiceProvider::class,
+        ChatUserServiceProvider::class
     ],
 
     /*

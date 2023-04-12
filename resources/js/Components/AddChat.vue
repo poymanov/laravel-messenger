@@ -1,7 +1,7 @@
 <script setup>
 
 import {ref, watch} from "vue";
-import {usePage} from "@inertiajs/vue3";
+import {usePage, Link} from "@inertiajs/vue3";
 import Modal from '@/Components/Modal.vue';
 import {debounce} from "lodash";
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -67,7 +67,7 @@ function openModal() {
             </form>
 
             <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-                <li v-for="user in users" class="py-3 sm:py-4 px-2 hover:bg-gray-100 rounded-lg">
+                <li v-for="user in users" class="py-3 sm:py-4 px-2 hover:bg-gray-100 rounded-lg mb-2">
                     <div class="flex items-center space-x-4">
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -78,7 +78,13 @@ function openModal() {
                             </p>
                         </div>
                         <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-
+                                <Link
+                                    :href="route('chats.store')"
+                                    method="post"
+                                    :data="{ user_id: user.id }"
+                                    as="button">
+                                    Go Chat
+                                </Link>
                         </div>
                     </div>
                 </li>

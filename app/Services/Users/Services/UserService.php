@@ -18,4 +18,12 @@ class UserService implements UserServiceContract
     {
         return $this->userRepository->findAllBySimilarEmail($email);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isExistsById(int $id): bool
+    {
+        return $this->userRepository->isExistsById($id);
+    }
 }

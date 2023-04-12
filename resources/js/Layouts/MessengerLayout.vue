@@ -19,9 +19,7 @@ import AddChat from '@/Components/AddChat.vue';
                             </div>
                         </section>
                         <section class="flex flex-col flex-auto">
-                            <div class="chat-body p-4 flex-1 overflow-y-scroll">
-                                <slot/>
-                            </div>
+                            <slot/>
                         </section>
                     </main>
                 </div>

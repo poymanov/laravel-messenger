@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -28,6 +29,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users/find-all-by-simular-email', [UserController::class, 'findAllBySimularEmail'])->name('user.find-all-by-simular-email');
 
+});
+
+Route::group([
+    'prefix'     => 'chats',
+    'as'         => 'chats.',
+    'controller' => ChatController::class,
+    'middleware' => 'auth',
+], function () {
+    Route::post('', 'store')->name('store');
+    Route::get('{id}', 'show')->name('show');
 });
 
 require __DIR__.'/auth.php';

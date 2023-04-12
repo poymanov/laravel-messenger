@@ -11,6 +11,7 @@
 |
 */
 
+use Tests\Helpers\AuthHelper;
 use Tests\Helpers\ModelBuilderHelper;
 use Tests\Helpers\RouteBuilderHelper;
 
@@ -40,6 +41,14 @@ uses(
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+/**
+ * @return AuthHelper
+ */
+function authHelper(): AuthHelper
+{
+    return AuthHelper::getInstance(modelBuilderHelper());
+}
 
 /**
  * @return ModelBuilderHelper
