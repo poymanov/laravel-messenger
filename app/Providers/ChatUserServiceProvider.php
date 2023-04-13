@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\ChatUser\Contracts\ChatUserRepositoryContract;
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
+use App\Services\ChatUser\Contracts\UserChatUserDtoFactoryContract;
+use App\Services\ChatUser\Factories\UserChatUserDtoFactory;
 use App\Services\ChatUser\Repositories\ChatUserRepository;
 use App\Services\ChatUser\Services\ChatUserService;
 use Illuminate\Support\ServiceProvider;
@@ -17,5 +19,6 @@ class ChatUserServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ChatUserRepositoryContract::class, ChatUserRepository::class);
         $this->app->singleton(ChatUserServiceContract::class, ChatUserService::class);
+        $this->app->singleton(UserChatUserDtoFactoryContract::class, UserChatUserDtoFactory::class);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\ChatUser\Contracts\ChatUserServiceContract;
+use App\Services\ChatUser\Dtos\UserChatUserDto;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -30,6 +32,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $chatUserService = app()->make(ChatUserServiceContract::class);
+
+        $chats = $request->user() ? $chatUserService->findAllChatIdsByUserId($request->user()->id) : [];
+
+        $chats = array_map(function (UserChatUserDto $chat) {
+            return [
+                'chat_id' => $chat->chatId->value(),
+                'username' => $chat->userName
+            ];
+        }, $chats);
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -39,6 +52,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'chats' => $chats
         ]);
     }
 }

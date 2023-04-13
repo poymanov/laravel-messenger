@@ -5,11 +5,16 @@ namespace App\Services\ChatUser\Repositories;
 use App\Models\ChatUser;
 use App\Services\ChatUser\Contracts\ChatUserRepositoryContract;
 use App\Services\ChatUser\Exceptions\CreateUserFailedException;
+use App\Services\ChatUser\Factories\UserChatUserDtoFactory;
 use Illuminate\Support\Facades\DB;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ChatUserRepository implements ChatUserRepositoryContract
 {
+    public function __construct(private readonly UserChatUserDtoFactory $userChatUserDtoFactory)
+    {
+    }
+
     /**
      * @inheritDoc
      */
@@ -40,5 +45,21 @@ class ChatUserRepository implements ChatUserRepositoryContract
         }
 
         return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAllChatIdsByUserId(int $userId): array
+    {
+        $chatUsers = DB::table('chat_users', 'cu1')
+            ->join('chat_users as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
+            ->join('users as u', 'cu2.user_id', '=', 'u.id')
+            ->select(['cu1.chat_id', 'u.name'])
+            ->where(['cu1.user_id' => $userId])
+            ->whereNot(['cu2.user_id' => $userId])
+            ->get();
+
+        return $this->userChatUserDtoFactory->createFromObjects($chatUsers);
     }
 }

@@ -2,6 +2,7 @@
 
 import AddChat from '@/Components/AddChat.vue';
 import {Link} from "@inertiajs/vue3";
+import Contacts from '@/Components/Contacts.vue';
 
 </script>
 
@@ -21,9 +22,7 @@ import {Link} from "@inertiajs/vue3";
                         <p class="text-md font-bold hidden text-black md:block group-hover:block">Messenger</p>
                         <AddChat/>
                     </div>
-                    <div class="contacts p-2 flex-1 overflow-y-scroll">
-
-                    </div>
+                    <Contacts />
                 </section>
                 <section class="flex flex-col flex-auto">
                     <slot/>

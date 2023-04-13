@@ -2,6 +2,7 @@
 
 namespace App\Services\ChatUser\Contracts;
 
+use App\Services\ChatUser\Dtos\UserChatUserDto;
 use App\Services\ChatUser\Exceptions\CreateUserFailedException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
@@ -23,4 +24,11 @@ interface ChatUserRepositoryContract
      * @throws CreateUserFailedException
      */
     public function create(int $userId, Uuid $chatId): void;
+
+    /**
+     * @param int $userId
+     *
+     * @return UserChatUserDto[]
+     */
+    public function findAllChatIdsByUserId(int $userId): array;
 }
