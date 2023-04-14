@@ -38,13 +38,13 @@ class HandleInertiaRequests extends Middleware
 
         $chats = array_map(function (UserChatUserDto $chat) {
             return [
-                'chat_id' => $chat->chatId->value(),
-                'username' => $chat->userName
+                'chat_id'  => $chat->chatId->value(),
+                'username' => $chat->userName,
             ];
         }, $chats);
 
         return array_merge(parent::share($request), [
-            'auth' => [
+            'auth'  => [
                 'user' => $request->user(),
             ],
             'ziggy' => function () use ($request) {
@@ -52,7 +52,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'chats' => $chats
+            'chats' => $chats,
         ]);
     }
 }

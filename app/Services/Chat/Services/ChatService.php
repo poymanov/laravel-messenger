@@ -4,6 +4,7 @@ namespace App\Services\Chat\Services;
 
 use App\Services\Chat\Contacts\ChatRepositoryContract;
 use App\Services\Chat\Contacts\ChatServiceContract;
+use App\Services\Chat\Dtos\ChatDto;
 use App\Services\Chat\Dtos\CreateChatDto;
 use App\Services\Chat\Exceptions\CreateChatUserNotFoundException;
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
@@ -63,5 +64,30 @@ class ChatService implements ChatServiceContract
         }
 
         return $chatId;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getById(Uuid $id): ChatDto
+    {
+        return $this->chatRepository->getById($id);
+    }
+
+    /**
+     * @param Uuid  $chatId
+     * @param array $chats
+     *
+     * @return array|null
+     */
+    public function getCurrentChatFromChats(Uuid $chatId, array $chats): ?array
+    {
+        foreach ($chats as $chat) {
+            if ($chat['chat_id'] === $chatId->value()) {
+                return $chat;
+            }
+        }
+
+        return null;
     }
 }
