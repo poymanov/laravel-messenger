@@ -5,7 +5,7 @@ import NewMessage from '@/Components/Chat/NewMessage.vue';
 import {usePage} from "@inertiajs/vue3";
 import MessagesList from '@/Components/Chat/MessagesList.vue';
 
-defineProps({
+const props = defineProps({
     currentChatUsername: {
         type: String,
         required: true
@@ -15,6 +15,10 @@ defineProps({
         required: true
     }
 });
+
+function addSentMessage(message) {
+    props.messages.push(message);
+}
 
 </script>
 
@@ -30,12 +34,12 @@ defineProps({
             </div>
         </div>
         <div class="chat-body p-4 flex-1 overflow-y-scroll">
-            <MessagesList :messages="messages"/>
+            <MessagesList :messages="messages" />
         </div>
         <div class="chat-footer flex-none">
             <div class="flex flex-row items-center p-4">
                 <div class="relative flex-grow">
-                    <NewMessage :current-chat-id="usePage().props.currentChatId"/>
+                    <NewMessage @messageAdded="addSentMessage" :current-chat-id="usePage().props.currentChatId"/>
                 </div>
             </div>
         </div>

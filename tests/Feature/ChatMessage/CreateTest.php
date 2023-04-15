@@ -72,11 +72,16 @@ test('success', function () {
 
     $response = $this->post(routeBuilderHelper()->chatMessage->create(), ['chat_id' => $chat->id, 'text' => $text]);
     $response->assertSessionHasNoErrors();
-    $response->assertNoContent();
+    $response->assertOk();
+    $response->assertJsonFragment([
+        'chat_id'        => $chat->id,
+        'sender_user_id' => $userCreator->id,
+        'text'           => $text,
+    ]);
 
     $this->assertDatabaseHas('chat_messages', [
-        'chat_id' => $chat->id,
+        'chat_id'        => $chat->id,
         'sender_user_id' => $userCreator->id,
-        'text'    => $text,
+        'text'           => $text,
     ]);
 });

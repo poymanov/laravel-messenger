@@ -17,6 +17,7 @@ const currentAuthUserId = usePage().props.auth.user.id;
 <template>
     <div
         v-for="message in messages"
+        :key="message.id"
         class="flex items-center group"
         :class="{'flex-row-reverse': currentAuthUserId === message.sender_user_id}"
     >

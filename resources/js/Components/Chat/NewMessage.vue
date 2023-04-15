@@ -2,6 +2,8 @@
 
 import {ref} from "vue";
 
+const emit = defineEmits(['messageAdded']);
+
 const text = ref('');
 
 const props = defineProps({
@@ -14,7 +16,10 @@ const props = defineProps({
 function sendMessage() {
     const url = route('chat-messages.store', {'chat_id': props.currentChatId, 'text': text.value});
 
-    axios.post(url).then(() => text.value = '').catch(error => console.log(error.message));
+    axios.post(url).then((response) => {
+        text.value = '';
+        emit('messageAdded', response.data);
+    }).catch(error => console.log(error.message));
 }
 
 </script>

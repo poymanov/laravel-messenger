@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChatMessage\StoreRequest;
+use App\Services\ChatMessage\Contracts\ChatMessageDtoFormatterContract;
 use App\Services\ChatMessage\Contracts\ChatMessageServiceContract;
 use App\Services\ChatMessage\Exceptions\ChatMessageChatNotFoundByIdException;
 use App\Services\ChatMessage\Factories\ChatMessageCreateDtoFactory;
@@ -18,16 +19,17 @@ class ChatMessageController extends Controller
     public function __construct(
         private readonly ChatUserServiceContract $chatUserService,
         private readonly ChatMessageCreateDtoFactory $chatMessageCreateDtoFactory,
-        private readonly ChatMessageServiceContract $chatMessageService
+        private readonly ChatMessageServiceContract $chatMessageService,
+        private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter
     ) {
     }
 
     /**
      * @param StoreRequest $request
      *
-     * @return Response
-     * @throws ChatMessageChatNotFoundByIdException
+     * @return \Illuminate\Http\JsonResponse
      * @throws Throwable
+     * @throws \App\Services\ChatMessage\Exceptions\ChatMessageNotFoundByIdException
      */
     public function store(StoreRequest $request)
     {
@@ -43,9 +45,12 @@ class ChatMessageController extends Controller
 
         try {
             $dto = $this->chatMessageCreateDtoFactory->createFromParams($authUserId, $chatId, $text);
-            $this->chatMessageService->create($dto);
+            $messageId = $this->chatMessageService->create($dto);
 
-            return response()->noContent();
+            $message = $this->chatMessageService->getOneById($messageId);
+            $messageFormatted = $this->chatMessageDtoFormatter->toArray($message);
+
+            return response()->json($messageFormatted);
         } catch (ChatMessageChatNotFoundByIdException) {
             throw new NotFoundHttpException();
         } catch (Throwable $e) {
