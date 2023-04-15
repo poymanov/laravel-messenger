@@ -6,6 +6,8 @@ use App\Http\Requests\Chat\StoreRequest;
 use App\Services\Chat\Contacts\ChatServiceContract;
 use App\Services\Chat\Exceptions\ChatNotFoundByIdException;
 use App\Services\Chat\Factories\CreateChatDtoFactory;
+use App\Services\ChatMessage\Contracts\ChatMessageDtoFormatterContract;
+use App\Services\ChatMessage\Contracts\ChatMessageServiceContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -17,7 +19,9 @@ class ChatController extends Controller
 {
     public function __construct(
         private readonly ChatServiceContract $chatService,
-        private readonly CreateChatDtoFactory $createChatDtoFactory
+        private readonly CreateChatDtoFactory $createChatDtoFactory,
+        private readonly ChatMessageServiceContract $chatMessageService,
+        private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter
     ) {
     }
 
@@ -68,8 +72,12 @@ class ChatController extends Controller
 
             Inertia::share('currentChatId', $chat->id->value());
 
+            $messages = $this->chatMessageService->findAllByChatId($chatId);
+            $messagesFormatted = $this->chatMessageDtoFormatter->fromArrayToArray($messages);
+
             return Inertia::render('Chat/Show', [
                 'currentChatUsername' => $currentChatData['username'],
+                'messages'            => $messagesFormatted,
             ]);
         } catch (ChatNotFoundByIdException) {
             return redirect(route('home'));

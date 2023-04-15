@@ -7,6 +7,7 @@ use App\Services\ChatMessage\Contracts\ChatMessageRepositoryContract;
 use App\Services\ChatMessage\Contracts\ChatMessageServiceContract;
 use App\Services\ChatMessage\Dtos\ChatMessageCreateDto;
 use App\Services\ChatMessage\Exceptions\ChatMessageChatNotFoundByIdException;
+use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ChatMessageService implements ChatMessageServiceContract
 {
@@ -26,5 +27,13 @@ class ChatMessageService implements ChatMessageServiceContract
         }
 
         $this->chatMessageRepository->create($dto);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAllByChatId(Uuid $chatId): array
+    {
+        return $this->chatMessageRepository->findAllByChatId($chatId);
     }
 }
