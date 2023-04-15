@@ -30,7 +30,15 @@ interface ChatUserRepositoryContract
      *
      * @return UserChatUserDto[]
      */
-    public function findAllChatIdsByUserId(int $userId): array;
+    public function findAllChatsByUserId(int $userId): array;
+
+    /**
+     * @param Uuid $chatId
+     * @param int  $userId
+     *
+     * @return UserChatUserDto|null
+     */
+    public function findOneChatByChatIdAndUserId(Uuid $chatId, int $userId): ?UserChatUserDto;
 
     /**
      * @param int  $userId

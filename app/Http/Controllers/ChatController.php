@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Chat\StoreRequest;
 use App\Services\Chat\Contacts\ChatServiceContract;
-use App\Services\Chat\Exceptions\ChatNotFoundByIdException;
 use App\Services\Chat\Factories\CreateChatDtoFactory;
 use App\Services\ChatMessage\Contracts\ChatMessageDtoFormatterContract;
 use App\Services\ChatMessage\Contracts\ChatMessageServiceContract;
+use App\Services\ChatUser\Contracts\ChatUserServiceContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -21,7 +21,8 @@ class ChatController extends Controller
         private readonly ChatServiceContract $chatService,
         private readonly CreateChatDtoFactory $createChatDtoFactory,
         private readonly ChatMessageServiceContract $chatMessageService,
-        private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter
+        private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter,
+        private readonly ChatUserServiceContract $chatUserService
     ) {
     }
 
@@ -58,29 +59,28 @@ class ChatController extends Controller
     public function show(string $id)
     {
         try {
-            $chatId = Uuid::make($id);
+            $authUserId = $this->getAuthUserId(request());
+            $chatId     = Uuid::make($id);
 
-            $chat            = $this->chatService->getById($chatId);
-            $currentChatData = $this->chatService->getCurrentChatFromChats(
-                $chat->id,
-                Inertia::getShared('chats', [])
-            );
+            if (!$this->chatService->isExistsById($chatId)) {
+                return redirect(route('home'));
+            }
+
+            $currentChatData = $this->chatUserService->findOneChatByChatIdAndUserId($chatId, $authUserId);
 
             if (is_null($currentChatData)) {
                 return redirect(route('home'));
             }
 
-            Inertia::share('currentChatId', $chat->id->value());
+            Inertia::share('currentChatId', $chatId->value());
 
-            $messages = $this->chatMessageService->findAllByChatId($chatId);
+            $messages          = $this->chatMessageService->findAllByChatId($chatId);
             $messagesFormatted = $this->chatMessageDtoFormatter->fromArrayToArray($messages);
 
             return Inertia::render('Chat/Show', [
-                'currentChatUsername' => $currentChatData['username'],
-                'messages'            => $messagesFormatted,
+                'username' => $currentChatData->userName,
+                'messages' => $messagesFormatted,
             ]);
-        } catch (ChatNotFoundByIdException) {
-            return redirect(route('home'));
         } catch (Throwable $e) {
             Log::error($e->getMessage());
             throw $e;

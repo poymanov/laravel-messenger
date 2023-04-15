@@ -6,18 +6,17 @@ use App\Services\ChatUser\Contracts\UserChatUserDtoFactoryContract;
 use App\Services\ChatUser\Dtos\UserChatUserDto;
 use Illuminate\Support\Collection;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
-use stdClass;
 
 class UserChatUserDtoFactory implements UserChatUserDtoFactoryContract
 {
     /**
      * @inheritDoc
      */
-    public function createFromObject(StdClass $chatUser): UserChatUserDto
+    public function createFromObject(object $chatUser): UserChatUserDto
     {
-        $dto = new UserChatUserDto();
-        $dto->chatId = Uuid::make($chatUser->chat_id);
-        $dto->userName = $chatUser->name;
+        $dto           = new UserChatUserDto();
+        $dto->chatId   = Uuid::make($chatUser->chat_id); // @phpstan-ignore-line
+        $dto->userName = $chatUser->name; // @phpstan-ignore-line
 
         return $dto;
     }

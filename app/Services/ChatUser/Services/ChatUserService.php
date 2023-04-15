@@ -4,6 +4,7 @@ namespace App\Services\ChatUser\Services;
 
 use App\Services\ChatUser\Contracts\ChatUserRepositoryContract;
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
+use App\Services\ChatUser\Dtos\UserChatUserDto;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ChatUserService implements ChatUserServiceContract
@@ -31,9 +32,17 @@ class ChatUserService implements ChatUserServiceContract
     /**
      * @inheritDoc
      */
-    public function findAllChatIdsByUserId(int $userId): array
+    public function findAllChatsByUserId(int $userId): array
     {
-        return $this->chatUserRepository->findAllChatIdsByUserId($userId);
+        return $this->chatUserRepository->findAllChatsByUserId($userId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOneChatByChatIdAndUserId(Uuid $chatId, int $userId): ?UserChatUserDto
+    {
+        return $this->chatUserRepository->findOneChatByChatIdAndUserId($chatId, $userId);
     }
 
     /**

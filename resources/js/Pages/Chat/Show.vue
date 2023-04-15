@@ -6,7 +6,7 @@ import {usePage} from "@inertiajs/vue3";
 import MessagesList from '@/Components/Chat/MessagesList.vue';
 
 const props = defineProps({
-    currentChatUsername: {
+    username: {
         type: String,
         required: true
     },
@@ -29,7 +29,7 @@ function addSentMessage(message) {
         <div class="chat-header text-black px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div class="flex">
                 <div class="text-sm">
-                    <p class="font-bold">{{ currentChatUsername }}</p>
+                    <p class="font-bold">{{ username }}</p>
                 </div>
             </div>
         </div>

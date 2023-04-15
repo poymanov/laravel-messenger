@@ -4,16 +4,15 @@ namespace App\Services\ChatUser\Contracts;
 
 use App\Services\ChatUser\Dtos\UserChatUserDto;
 use Illuminate\Support\Collection;
-use stdClass;
 
 interface UserChatUserDtoFactoryContract
 {
     /**
-     * @param stdClass $chatUser
+     * @param object $chatUser
      *
      * @return UserChatUserDto
      */
-    public function createFromObject(StdClass $chatUser): UserChatUserDto;
+    public function createFromObject(object $chatUser): UserChatUserDto;
 
     /**
      * @param Collection $chatUsers

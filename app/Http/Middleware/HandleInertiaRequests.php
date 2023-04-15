@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
         $userChatUserDtoFormatter = app()->make(UserChatUserDtoFormatterContract::class);
 
         if ($request->user()) {
-            $chats          = $chatUserService->findAllChatIdsByUserId($request->user()->id);
+            $chats          = $chatUserService->findAllChatsByUserId($request->user()->id);
             $chatsFormatted = $userChatUserDtoFormatter->fromArrayToArray($chats);
         } else {
             $chatsFormatted = [];

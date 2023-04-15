@@ -4,6 +4,7 @@ namespace App\Services\ChatUser\Repositories;
 
 use App\Models\ChatUser;
 use App\Services\ChatUser\Contracts\ChatUserRepositoryContract;
+use App\Services\ChatUser\Dtos\UserChatUserDto;
 use App\Services\ChatUser\Exceptions\CreateUserFailedException;
 use App\Services\ChatUser\Factories\UserChatUserDtoFactory;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +51,7 @@ class ChatUserRepository implements ChatUserRepositoryContract
     /**
      * @inheritDoc
      */
-    public function findAllChatIdsByUserId(int $userId): array
+    public function findAllChatsByUserId(int $userId): array
     {
         $chatUsers = DB::table('chat_users', 'cu1')
             ->join('chat_users as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
@@ -61,6 +62,30 @@ class ChatUserRepository implements ChatUserRepositoryContract
             ->get();
 
         return $this->userChatUserDtoFactory->createFromObjects($chatUsers);
+    }
+
+    /**
+     * @param Uuid $chatId
+     * @param int  $userId
+     *
+     * @return UserChatUserDto|null
+     */
+    public function findOneChatByChatIdAndUserId(Uuid $chatId, int $userId): ?UserChatUserDto
+    {
+        $chatUser = DB::table('chat_users', 'cu1')
+            ->join('chat_users as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
+            ->join('users as u', 'cu2.user_id', '=', 'u.id')
+            ->select(['cu1.chat_id', 'u.name'])
+            ->where(['cu1.user_id' => $userId])
+            ->whereNot(['cu2.user_id' => $userId])
+            ->where(['cu1.chat_id' => $chatId->value()])
+            ->first();
+
+        if (is_null($chatUser)) {
+            return null;
+        }
+
+        return $this->userChatUserDtoFactory->createFromObject($chatUser);
     }
 
     /**
