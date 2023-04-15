@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
-use App\Services\ChatUser\Dtos\UserChatUserDto;
+use App\Services\ChatUser\Contracts\UserChatUserDtoFormatterContract;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -32,16 +32,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $chatUserService = app()->make(ChatUserServiceContract::class);
+        $chatUserService          = app()->make(ChatUserServiceContract::class);
+        $userChatUserDtoFormatter = app()->make(UserChatUserDtoFormatterContract::class);
 
-        $chats = $request->user() ? $chatUserService->findAllChatIdsByUserId($request->user()->id) : [];
-
-        $chats = array_map(function (UserChatUserDto $chat) {
-            return [
-                'chat_id'  => $chat->chatId->value(),
-                'username' => $chat->userName,
-            ];
-        }, $chats);
+        if ($request->user()) {
+            $chats          = $chatUserService->findAllChatIdsByUserId($request->user()->id);
+            $chatsFormatted = $userChatUserDtoFormatter->fromArrayToArray($chats);
+        } else {
+            $chatsFormatted = [];
+        }
 
         return array_merge(parent::share($request), [
             'auth'  => [
@@ -52,7 +51,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'chats' => $chats,
+            'chats' => $chatsFormatted,
         ]);
     }
 }
