@@ -1,12 +1,14 @@
 <script setup>
 import MessengerLayout from '@/Layouts/MessengerLayout.vue';
 import {Head} from '@inertiajs/vue3';
+import NewMessage from '@/Components/Chat/NewMessage.vue';
+import {usePage} from "@inertiajs/vue3";
 
 defineProps({
     currentChatUsername: {
         type: String,
         required: true
-    },
+    }
 });
 
 </script>
@@ -28,10 +30,7 @@ defineProps({
         <div class="chat-footer flex-none">
             <div class="flex flex-row items-center p-4">
                 <div class="relative flex-grow">
-                    <label>
-                        <input class="rounded-full py-2 pl-3 pr-10 w-full border border-gray-200 focus:border-gray-200 bg-gray-200 focus:bg-gray-200 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
-                               type="text" value="" placeholder="Aa"/>
-                    </label>
+                    <NewMessage :current-chat-id="usePage().props.currentChatId"/>
                 </div>
             </div>
         </div>

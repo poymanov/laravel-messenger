@@ -2,13 +2,13 @@
 
 namespace App\Services\ChatUser\Services;
 
+use App\Services\ChatUser\Contracts\ChatUserRepositoryContract;
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
-use App\Services\ChatUser\Repositories\ChatUserRepository;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ChatUserService implements ChatUserServiceContract
 {
-    public function __construct(private readonly ChatUserRepository $chatUserRepository)
+    public function __construct(private readonly ChatUserRepositoryContract $chatUserRepository)
     {
     }
 
@@ -34,5 +34,13 @@ class ChatUserService implements ChatUserServiceContract
     public function findAllChatIdsByUserId(int $userId): array
     {
         return $this->chatUserRepository->findAllChatIdsByUserId($userId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isChatMember(int $userId, Uuid $chatId): bool
+    {
+        return $this->chatUserRepository->isChatMember($userId, $chatId);
     }
 }

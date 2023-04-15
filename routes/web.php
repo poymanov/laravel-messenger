@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -28,7 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/users/find-all-by-simular-email', [UserController::class, 'findAllBySimularEmail'])->name('user.find-all-by-simular-email');
-
 });
 
 Route::group([
@@ -41,4 +41,13 @@ Route::group([
     Route::get('{id}', 'show')->name('show');
 });
 
-require __DIR__.'/auth.php';
+Route::group([
+    'prefix'     => 'chat-messages',
+    'as'         => 'chat-messages.',
+    'controller' => ChatMessageController::class,
+    'middleware' => 'auth',
+], function () {
+    Route::post('', 'store')->name('store');
+});
+
+require __DIR__ . '/auth.php';

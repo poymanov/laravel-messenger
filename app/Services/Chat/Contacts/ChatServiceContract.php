@@ -33,4 +33,11 @@ interface ChatServiceContract
      * @return array|null
      */
     public function getCurrentChatFromChats(Uuid $chatId, array $chats): ?array;
+
+    /**
+     * @param Uuid $id
+     *
+     * @return bool
+     */
+    public function isExistsById(Uuid $id): bool;
 }

@@ -90,4 +90,12 @@ class ChatService implements ChatServiceContract
 
         return null;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isExistsById(Uuid $id): bool
+    {
+        return $this->chatRepository->isExistsById($id);
+    }
 }

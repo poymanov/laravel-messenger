@@ -62,4 +62,12 @@ class ChatUserRepository implements ChatUserRepositoryContract
 
         return $this->userChatUserDtoFactory->createFromObjects($chatUsers);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isChatMember(int $userId, Uuid $chatId): bool
+    {
+        return ChatUser::whereChatId($chatId->value())->whereUserId($userId)->exists();
+    }
 }

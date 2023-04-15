@@ -16,7 +16,6 @@ class ChatRepository implements ChatRepositoryContract
     {
     }
 
-
     /**
      * @inheritDoc
      */
@@ -45,5 +44,13 @@ class ChatRepository implements ChatRepositoryContract
         }
 
         return $this->chatDtoFactory->createFromModel($chat);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isExistsById(Uuid $id): bool
+    {
+        return Chat::whereId($id->value())->exists();
     }
 }

@@ -13,7 +13,7 @@ use Inertia\Response;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 use Throwable;
 
-class ChatController
+class ChatController extends Controller
 {
     public function __construct(
         private readonly ChatServiceContract $chatService,

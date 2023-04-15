@@ -22,4 +22,11 @@ interface ChatRepositoryContract
      * @throws ChatNotFoundByIdException
      */
     public function getById(Uuid $id): ChatDto;
+
+    /**
+     * @param Uuid $id
+     *
+     * @return bool
+     */
+    public function isExistsById(Uuid $id): bool;
 }

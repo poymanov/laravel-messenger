@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\ChatMessageServiceProvider;
 use App\Providers\ChatServiceProvider;
 use App\Providers\ChatUserServiceProvider;
 use App\Providers\UserServiceProvider;
@@ -44,7 +45,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -199,7 +200,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         UserServiceProvider::class,
         ChatServiceProvider::class,
-        ChatUserServiceProvider::class
+        ChatUserServiceProvider::class,
+        ChatMessageServiceProvider::class,
     ],
 
     /*
