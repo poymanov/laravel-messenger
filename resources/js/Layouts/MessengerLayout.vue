@@ -1,7 +1,7 @@
 <script setup>
 
 import AddChat from '@/Components/Chat/AddChat.vue';
-import {Link} from "@inertiajs/vue3";
+import {Link, usePage} from "@inertiajs/vue3";
 import Contacts from '@/Components/UI/Contacts.vue';
 
 </script>
@@ -16,7 +16,7 @@ import Contacts from '@/Components/UI/Contacts.vue';
                         <div class="relative flex flex-shrink-0">
                             <Link :href="route('profile.edit')">
                                 <img class="rounded-full" alt=""
-                                     src="https://www.gravatar.com/avatar/00000000000000000000000000000000?s=50"/>
+                                     :src="usePage().props.auth.avatar_url"/>
                             </Link>
                         </div>
                         <p class="text-md font-bold hidden text-black md:block group-hover:block">Messenger</p>

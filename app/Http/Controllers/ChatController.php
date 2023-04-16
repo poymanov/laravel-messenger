@@ -78,8 +78,9 @@ class ChatController extends Controller
             $messagesFormatted = $this->chatMessageDtoFormatter->fromArrayToArray($messages);
 
             return Inertia::render('Chat/Show', [
-                'username' => $currentChatData->userName,
-                'messages' => $messagesFormatted,
+                'username'   => $currentChatData->userName,
+                'avatar_url' => $currentChatData->avatarUrl,
+                'messages'   => $messagesFormatted,
             ]);
         } catch (Throwable $e) {
             Log::error($e->getMessage());

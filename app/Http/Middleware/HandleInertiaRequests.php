@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
 use App\Services\ChatUser\Contracts\UserChatUserDtoFormatterContract;
+use App\Services\Users\Contracts\UserAvatarServiceContract;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -34,6 +35,7 @@ class HandleInertiaRequests extends Middleware
     {
         $chatUserService          = app()->make(ChatUserServiceContract::class);
         $userChatUserDtoFormatter = app()->make(UserChatUserDtoFormatterContract::class);
+        $userAvatarService        = app()->make(UserAvatarServiceContract::class);
 
         if ($request->user()) {
             $chats          = $chatUserService->findAllChatsByUserId($request->user()->id);
@@ -45,6 +47,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth'  => [
                 'user' => $request->user(),
+                'avatar_url' => $request->user() ? $userAvatarService->getGravatarUrl($request->user()->email) : ''
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [

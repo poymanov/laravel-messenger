@@ -13,8 +13,9 @@ class UserChatUserDtoFormatter implements UserChatUserDtoFormatterContract
     public function toArray(UserChatUserDto $dto): array
     {
         return [
-            'chat_id'  => $dto->chatId->value(),
-            'username' => $dto->userName,
+            'chat_id'    => $dto->chatId->value(),
+            'username'   => $dto->userName,
+            'avatar_url' => $dto->avatarUrl,
         ];
     }
 

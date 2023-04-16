@@ -10,6 +10,10 @@ const props = defineProps({
         type: String,
         required: true
     },
+    avatar_url: {
+        type: String,
+        required: true
+    },
     messages: {
         type: Array,
         required: true
@@ -28,6 +32,9 @@ function addSentMessage(message) {
     <MessengerLayout>
         <div class="chat-header text-black px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div class="flex">
+                <div class="w-12 h-12 mr-4 relative flex flex-shrink-0">
+                    <img class="shadow-md rounded-full w-full h-full object-cover" :src="avatar_url" alt="">
+                </div>
                 <div class="text-sm">
                     <p class="font-bold">{{ username }}</p>
                 </div>

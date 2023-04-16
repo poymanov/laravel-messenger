@@ -56,7 +56,7 @@ class ChatUserRepository implements ChatUserRepositoryContract
         $chatUsers = DB::table('chat_users', 'cu1')
             ->join('chat_users as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
             ->join('users as u', 'cu2.user_id', '=', 'u.id')
-            ->select(['cu1.chat_id', 'u.name'])
+            ->select(['cu1.chat_id', 'u.name', 'u.email'])
             ->where(['cu1.user_id' => $userId])
             ->whereNot(['cu2.user_id' => $userId])
             ->get();
@@ -75,7 +75,7 @@ class ChatUserRepository implements ChatUserRepositoryContract
         $chatUser = DB::table('chat_users', 'cu1')
             ->join('chat_users as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
             ->join('users as u', 'cu2.user_id', '=', 'u.id')
-            ->select(['cu1.chat_id', 'u.name'])
+            ->select(['cu1.chat_id', 'u.name', 'u.email'])
             ->where(['cu1.user_id' => $userId])
             ->whereNot(['cu2.user_id' => $userId])
             ->where(['cu1.chat_id' => $chatId->value()])
