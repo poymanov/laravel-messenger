@@ -14,11 +14,12 @@ class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
     public function toArray(ChatMessageDto $dto): array
     {
         return [
-            'id'             => $dto->id->value(),
-            'chat_id'        => $dto->chatId->value(),
-            'sender_user_id' => $dto->senderUserId,
-            'text'           => $dto->text,
-            'created_at'     => $dto->createdAt->format('Y-m-d H:i:s'),
+            'id'              => $dto->id->value(),
+            'chat_id'         => $dto->chatId->value(),
+            'sender_user_id'  => $dto->senderUserId,
+            'text'            => $dto->text,
+            'created_at'      => $dto->createdAt->format('Y-m-d H:i:s'),
+            'created_at_time' => $dto->createdAt->format('H:i'),
         ];
     }
 
@@ -27,13 +28,13 @@ class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
      */
     public function toArrayByDate(ChatMessageDto $dto): array
     {
-        $date = $this->formatToDate($dto->createdAt);
+        $date      = $this->formatToDate($dto->createdAt);
         $dateTitle = $this->formatToDateTitle($dto->createdAt);
 
         return [
-            'date' => $date,
-            'title' => $dateTitle,
-            'message' => $this->toArray($dto)
+            'date'    => $date,
+            'title'   => $dateTitle,
+            'message' => $this->toArray($dto),
         ];
     }
 
@@ -45,11 +46,11 @@ class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
         $messages = [];
 
         foreach ($dtos as $dto) {
-            $date = $this->formatToDate($dto->createdAt);
+            $date      = $this->formatToDate($dto->createdAt);
             $dateTitle = $this->formatToDateTitle($dto->createdAt);
 
             $messages[$date]['messages'][] = $this->toArray($dto);
-            $messages[$date]['title'] = $dateTitle;
+            $messages[$date]['title']      = $dateTitle;
         }
 
         ksort($messages);

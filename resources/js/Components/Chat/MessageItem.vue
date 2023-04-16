@@ -15,8 +15,11 @@ const isCurrentUserSender = currentAuthUserId === props.message.sender_user_id;
 </script>
 
 <template>
-    <p
-        class="px-6 py-3 rounded-full max-w-xs lg:max-w-md text-gray-200 mb-2"
-        :class="{'bg-gray-800': !isCurrentUserSender, 'bg-blue-700': isCurrentUserSender}"
-    >{{ message.text }} </p>
+    <div class="flex flex-col mb-2">
+        <p
+            class="px-6 py-3 rounded-full max-w-xs lg:max-w-md text-gray-200"
+            :class="{'bg-gray-800': !isCurrentUserSender, 'bg-blue-700': isCurrentUserSender}"
+        >{{ message.text }}</p>
+        <p class="ml-auto text-xs text-black">{{ message.created_at_time }}</p>
+    </div>
 </template>

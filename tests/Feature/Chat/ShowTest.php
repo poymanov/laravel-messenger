@@ -89,18 +89,20 @@ test('success with messages in same day', function () {
                     'title'    => $messageFirst->created_at->format('d F'),
                     'messages' => [
                         [
-                            'id'             => $messageFirst->id,
-                            'chat_id'        => $messageFirst->chat_id,
-                            'sender_user_id' => $messageFirst->sender_user_id,
-                            'text'           => $messageFirst->text,
-                            'created_at'     => $messageFirst->created_at->format('Y-m-d H:i:s'),
+                            'id'              => $messageFirst->id,
+                            'chat_id'         => $messageFirst->chat_id,
+                            'sender_user_id'  => $messageFirst->sender_user_id,
+                            'text'            => $messageFirst->text,
+                            'created_at'      => $messageFirst->created_at->format('Y-m-d H:i:s'),
+                            'created_at_time' => $messageFirst->created_at->format('H:i'),
                         ],
                         [
-                            'id'             => $messageSecond->id,
-                            'chat_id'        => $messageSecond->chat_id,
-                            'sender_user_id' => $messageSecond->sender_user_id,
-                            'text'           => $messageSecond->text,
-                            'created_at'     => $messageSecond->created_at->format('Y-m-d H:i:s'),
+                            'id'              => $messageSecond->id,
+                            'chat_id'         => $messageSecond->chat_id,
+                            'sender_user_id'  => $messageSecond->sender_user_id,
+                            'text'            => $messageSecond->text,
+                            'created_at'      => $messageSecond->created_at->format('Y-m-d H:i:s'),
+                            'created_at_time' => $messageSecond->created_at->format('H:i'),
                         ],
                     ],
                 ]))
@@ -141,11 +143,12 @@ test('success with messages in different days', function () {
                     'title'    => $messageFirst->created_at->format('d F'),
                     'messages' => [
                         [
-                            'id'             => $messageFirst->id,
-                            'chat_id'        => $messageFirst->chat_id,
-                            'sender_user_id' => $messageFirst->sender_user_id,
-                            'text'           => $messageFirst->text,
-                            'created_at'     => $messageFirst->created_at->format('Y-m-d H:i:s'),
+                            'id'              => $messageFirst->id,
+                            'chat_id'         => $messageFirst->chat_id,
+                            'sender_user_id'  => $messageFirst->sender_user_id,
+                            'text'            => $messageFirst->text,
+                            'created_at'      => $messageFirst->created_at->format('Y-m-d H:i:s'),
+                            'created_at_time' => $messageFirst->created_at->format('H:i'),
                         ],
                     ],
                 ]))
@@ -153,11 +156,12 @@ test('success with messages in different days', function () {
                     'title'    => $messageSecond->created_at->format('d F'),
                     'messages' => [
                         [
-                            'id'             => $messageSecond->id,
-                            'chat_id'        => $messageSecond->chat_id,
-                            'sender_user_id' => $messageSecond->sender_user_id,
-                            'text'           => $messageSecond->text,
-                            'created_at'     => $messageSecond->created_at->format('Y-m-d H:i:s'),
+                            'id'              => $messageSecond->id,
+                            'chat_id'         => $messageSecond->chat_id,
+                            'sender_user_id'  => $messageSecond->sender_user_id,
+                            'text'            => $messageSecond->text,
+                            'created_at'      => $messageSecond->created_at->format('Y-m-d H:i:s'),
+                            'created_at_time' => $messageSecond->created_at->format('H:i'),
                         ],
                     ],
                 ]))
