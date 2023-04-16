@@ -19,4 +19,11 @@ interface ChatMessageDtoFormatterContract
      * @return array
      */
     public function fromArrayToArray(array $dtos): array;
+
+    /**
+     * @param ChatMessageDto $dto
+     *
+     * @return array
+     */
+    public function toArrayByDate(ChatMessageDto $dto): array;
 }

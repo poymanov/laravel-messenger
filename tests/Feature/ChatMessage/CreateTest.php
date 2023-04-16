@@ -73,11 +73,14 @@ test('success', function () {
     $response = $this->post(routeBuilderHelper()->chatMessage->create(), ['chat_id' => $chat->id, 'text' => $text]);
     $response->assertSessionHasNoErrors();
     $response->assertOk();
-    $response->assertJsonFragment([
-        'chat_id'        => $chat->id,
-        'sender_user_id' => $userCreator->id,
-        'text'           => $text,
-    ]);
+
+    $message = $response->json();
+
+    $this->assertEquals(now()->format('Y-m-d'), $message['date']);
+    $this->assertEquals(now()->format('d F'), $message['title']);
+    $this->assertEquals($chat->id, $message['message']['chat_id']);
+    $this->assertEquals($userCreator->id, $message['message']['sender_user_id']);
+    $this->assertEquals($text, $message['message']['text']);
 
     $this->assertDatabaseHas('chat_messages', [
         'chat_id'        => $chat->id,

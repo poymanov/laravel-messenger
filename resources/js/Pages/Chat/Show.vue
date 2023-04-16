@@ -15,13 +15,20 @@ const props = defineProps({
         required: true
     },
     messages: {
-        type: Array,
+        type: Object,
         required: true
     }
 });
 
-function addSentMessage(message) {
-    props.messages.push(message);
+function addSentMessage(newMessage) {
+    if (newMessage.date in props.messages) {
+        props.messages[newMessage.date].messages.push(newMessage.message);
+    } else {
+        props.messages[newMessage.date] = {
+            title: newMessage.title,
+            messages: [newMessage.message]
+        }
+    }
 }
 
 </script>
@@ -41,7 +48,7 @@ function addSentMessage(message) {
             </div>
         </div>
         <div class="chat-body p-4 flex-1 overflow-y-scroll">
-            <MessagesList :messages="messages" />
+            <MessagesList :messages="messages"/>
         </div>
         <div class="chat-footer flex-none">
             <div class="flex flex-row items-center p-4">

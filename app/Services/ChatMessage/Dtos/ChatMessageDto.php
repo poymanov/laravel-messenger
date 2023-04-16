@@ -2,6 +2,7 @@
 
 namespace App\Services\ChatMessage\Dtos;
 
+use Carbon\Carbon;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 class ChatMessageDto
@@ -13,4 +14,6 @@ class ChatMessageDto
     public int $senderUserId;
 
     public string $text;
+
+    public Carbon $createdAt;
 }

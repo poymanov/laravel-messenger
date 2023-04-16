@@ -4,6 +4,7 @@ namespace App\Services\ChatMessage\Formatters;
 
 use App\Services\ChatMessage\Contracts\ChatMessageDtoFormatterContract;
 use App\Services\ChatMessage\Dtos\ChatMessageDto;
+use Carbon\Carbon;
 
 class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
 {
@@ -17,6 +18,22 @@ class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
             'chat_id'        => $dto->chatId->value(),
             'sender_user_id' => $dto->senderUserId,
             'text'           => $dto->text,
+            'created_at'     => $dto->createdAt->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArrayByDate(ChatMessageDto $dto): array
+    {
+        $date = $this->formatToDate($dto->createdAt);
+        $dateTitle = $this->formatToDateTitle($dto->createdAt);
+
+        return [
+            'date' => $date,
+            'title' => $dateTitle,
+            'message' => $this->toArray($dto)
         ];
     }
 
@@ -25,6 +42,38 @@ class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
      */
     public function fromArrayToArray(array $dtos): array
     {
-        return array_map(fn (ChatMessageDto $dto) => $this->toArray($dto), $dtos);
+        $messages = [];
+
+        foreach ($dtos as $dto) {
+            $date = $this->formatToDate($dto->createdAt);
+            $dateTitle = $this->formatToDateTitle($dto->createdAt);
+
+            $messages[$date]['messages'][] = $this->toArray($dto);
+            $messages[$date]['title'] = $dateTitle;
+        }
+
+        ksort($messages);
+
+        return $messages;
+    }
+
+    /**
+     * @param Carbon $date
+     *
+     * @return string
+     */
+    private function formatToDate(Carbon $date): string
+    {
+        return $date->format('Y-m-d');
+    }
+
+    /**
+     * @param Carbon $date
+     *
+     * @return string
+     */
+    private function formatToDateTitle(Carbon $date): string
+    {
+        return $date->format('d F');
     }
 }
