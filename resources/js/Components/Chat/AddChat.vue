@@ -2,9 +2,9 @@
 
 import {ref, watch} from "vue";
 import {usePage, Link} from "@inertiajs/vue3";
-import Modal from '@/Components/Modal.vue';
+import Modal from '@/Components/UI/Modal.vue';
 import {debounce} from "lodash";
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/UI/PrimaryButton.vue';
 
 const showModal = ref(false);
 const users = ref([]);

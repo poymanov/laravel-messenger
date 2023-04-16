@@ -1,8 +1,8 @@
 <script setup>
 
-import AddChat from '@/Components/AddChat.vue';
+import AddChat from '@/Components/Chat/AddChat.vue';
 import {Link} from "@inertiajs/vue3";
-import Contacts from '@/Components/Contacts.vue';
+import Contacts from '@/Components/UI/Contacts.vue';
 
 </script>
 

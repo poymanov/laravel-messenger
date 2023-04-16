@@ -1,8 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+
 import HeaderNavigation from '@/Layouts/Common/HeaderNavigation.vue';
 
-const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
