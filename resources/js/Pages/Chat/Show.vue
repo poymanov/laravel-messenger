@@ -1,9 +1,10 @@
 <script setup>
 import MessengerLayout from '@/Layouts/MessengerLayout.vue';
-import {Head} from '@inertiajs/vue3';
 import NewMessage from '@/Components/Chat/NewMessage.vue';
-import {usePage} from "@inertiajs/vue3";
+import {usePage, Head} from "@inertiajs/vue3";
 import MessagesList from '@/Components/Chat/MessagesList.vue';
+import {onMounted, ref, watch} from "vue";
+import {debounce} from "lodash";
 
 const props = defineProps({
     username: {
@@ -20,6 +21,18 @@ const props = defineProps({
     }
 });
 
+const chatBody = ref(null);
+
+onMounted(() => {
+    chatBody.value.scrollTop = chatBody.value.scrollHeight;
+});
+
+watch(props.messages, debounce(() => {
+    let items = document.getElementsByClassName('chat-message');
+    let lastItem = items[items.length-1];
+    lastItem.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+}), 300);
+
 function addSentMessage(newMessage) {
     if (newMessage.date in props.messages) {
         props.messages[newMessage.date].messages.push(newMessage.message);
@@ -30,11 +43,10 @@ function addSentMessage(newMessage) {
         }
     }
 }
-
 </script>
 
 <template>
-    <Head title="Chat"/>
+    <Head :title="`Chat with ` + username"/>
 
     <MessengerLayout>
         <div class="chat-header text-black px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
@@ -47,7 +59,7 @@ function addSentMessage(newMessage) {
                 </div>
             </div>
         </div>
-        <div class="chat-body p-4 flex-1 overflow-y-scroll">
+        <div ref="chatBody" class="chat-body p-4 flex-1 overflow-y-scroll">
             <MessagesList :messages="messages"/>
         </div>
         <div class="chat-footer flex-none">

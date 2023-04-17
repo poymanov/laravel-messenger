@@ -15,7 +15,7 @@ const isCurrentUserSender = currentAuthUserId === props.message.sender_user_id;
 </script>
 
 <template>
-    <div class="flex flex-col mb-2">
+    <div class="flex flex-col mb-2 chat-message">
         <p
             class="px-6 py-3 rounded-full max-w-xs lg:max-w-md text-gray-200"
             :class="{'bg-gray-800': !isCurrentUserSender, 'bg-blue-700': isCurrentUserSender}"

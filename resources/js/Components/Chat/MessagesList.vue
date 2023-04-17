@@ -15,7 +15,7 @@ const currentAuthUserId = usePage().props.auth.user.id;
 </script>
 
 <template>
-    <div v-for="(data, name) in messages" :key="name">
+    <template v-for="(data, name) in messages" :key="name">
         <p class="p-4 text-center text-gray-500">{{ data.title }}</p>
 
         <div
@@ -26,5 +26,5 @@ const currentAuthUserId = usePage().props.auth.user.id;
         >
             <MessageItem :message="message"/>
         </div>
-    </div>
+    </template>
 </template>
