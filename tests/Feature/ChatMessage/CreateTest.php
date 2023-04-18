@@ -87,4 +87,10 @@ test('success', function () {
         'sender_user_id' => $userCreator->id,
         'text'           => $text,
     ]);
+
+    $this->assertDatabaseHas('chat_message_statuses', [
+        'chat_id' => $chat->id,
+        'user_id' => $userMember->id,
+        'read_at' => null,
+    ]);
 });

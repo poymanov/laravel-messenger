@@ -8,13 +8,21 @@ use App\Services\ChatMessage\Contracts\ChatMessageServiceContract;
 use App\Services\ChatMessage\Dtos\ChatMessageCreateDto;
 use App\Services\ChatMessage\Dtos\ChatMessageDto;
 use App\Services\ChatMessage\Exceptions\ChatMessageChatNotFoundByIdException;
+use App\Services\ChatMessageStatus\Contracts\ChatMessageStatusCreateDtoFactoryContract;
+use App\Services\ChatMessageStatus\Contracts\ChatMessageStatusServiceContract;
+use App\Services\ChatUser\Contracts\ChatUserServiceContract;
+use Illuminate\Support\Facades\DB;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
+use Throwable;
 
 class ChatMessageService implements ChatMessageServiceContract
 {
     public function __construct(
         private readonly ChatServiceContract $chatService,
-        private readonly ChatMessageRepositoryContract $chatMessageRepository
+        private readonly ChatMessageRepositoryContract $chatMessageRepository,
+        private readonly ChatMessageStatusCreateDtoFactoryContract $chatMessageStatusCreateDtoFactory,
+        private readonly ChatMessageStatusServiceContract $chatMessageStatusService,
+        private readonly ChatUserServiceContract $chatUserService
     ) {
     }
 
@@ -27,7 +35,29 @@ class ChatMessageService implements ChatMessageServiceContract
             throw new ChatMessageChatNotFoundByIdException($dto->chatId);
         }
 
-        return $this->chatMessageRepository->create($dto);
+        $messageId = $this->chatMessageRepository->create($dto);
+
+        DB::beginTransaction();
+
+        try {
+            $chatMembers = $this->chatUserService->findChatMemberIds($dto->chatId);
+
+            foreach ($chatMembers as $chatMember) {
+                if ($chatMember === $dto->senderUserId) {
+                    continue;
+                }
+
+                $createDto = $this->chatMessageStatusCreateDtoFactory->createFromParams($dto->chatId, $messageId, $chatMember);
+                $this->chatMessageStatusService->create($createDto);
+            }
+
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::commit();
+            throw $e;
+        }
+
+        return $messageId;
     }
 
     /**

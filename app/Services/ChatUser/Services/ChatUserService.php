@@ -52,4 +52,12 @@ class ChatUserService implements ChatUserServiceContract
     {
         return $this->chatUserRepository->isChatMember($userId, $chatId);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findChatMemberIds(Uuid $chatId): array
+    {
+        return $this->chatUserRepository->findChatMemberIds($chatId);
+    }
 }

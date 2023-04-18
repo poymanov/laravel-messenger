@@ -1,6 +1,7 @@
 <?php
 
 use App\Providers\ChatMessageServiceProvider;
+use App\Providers\ChatMessageStatusServiceProvider;
 use App\Providers\ChatServiceProvider;
 use App\Providers\ChatUserServiceProvider;
 use App\Providers\UserServiceProvider;
@@ -202,6 +203,7 @@ return [
         ChatServiceProvider::class,
         ChatUserServiceProvider::class,
         ChatMessageServiceProvider::class,
+        ChatMessageStatusServiceProvider::class,
     ],
 
     /*

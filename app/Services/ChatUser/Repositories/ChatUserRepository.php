@@ -92,4 +92,12 @@ ORDER BY cm.created_at DESC', ['user_id' => $userId]);
     {
         return ChatUser::whereChatId($chatId->value())->whereUserId($userId)->exists();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findChatMemberIds(Uuid $chatId): array
+    {
+        return ChatUser::whereChatId($chatId->value())->select('user_id')->get()->pluck('user_id')->toArray();
+    }
 }

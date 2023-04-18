@@ -47,4 +47,11 @@ interface ChatUserServiceContract
      * @return bool
      */
     public function isChatMember(int $userId, Uuid $chatId): bool;
+
+    /**
+     * @param Uuid $chatId
+     *
+     * @return array
+     */
+    public function findChatMemberIds(Uuid $chatId): array;
 }
