@@ -20,6 +20,11 @@
                 <Link :href="route('chats.show', {'id': chat.chat_id})">
                     <p>{{ chat.username }}</p>
                 </Link>
+                <div class="flex items-center text-sm text-gray-600">
+                    <div class="min-w-0">
+                        <p class="truncate">{{ chat.last_message_text }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

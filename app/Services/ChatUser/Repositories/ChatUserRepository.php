@@ -53,22 +53,19 @@ class ChatUserRepository implements ChatUserRepositoryContract
      */
     public function findAllChatsByUserId(int $userId): array
     {
-        $chatUsers = DB::table('chat_users', 'cu1')
-            ->join('chat_users as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
-            ->join('users as u', 'cu2.user_id', '=', 'u.id')
-            ->select(['cu1.chat_id', 'u.name', 'u.email'])
-            ->where(['cu1.user_id' => $userId])
-            ->whereNot(['cu2.user_id' => $userId])
-            ->get();
+        $chatUsers = DB::select('SELECT cu1.chat_id, u.name, u.email, cm.text as last_message_text
+FROM chat_users cu1
+JOIN chat_users as cu2 ON cu1.chat_id = cu2.chat_id
+JOIN users as u ON cu2.user_id = u.id
+LEFT JOIN chat_messages as cm ON cu1.chat_id = cm.chat_id AND cm.id = (SELECT id from chat_messages cm2 WHERE cm2.chat_id = cu1.chat_id ORDER BY cm2.created_at DESC LIMIT 1)
+WHERE cu1.user_id = :user_id AND cu2.user_id <> :user_id
+ORDER BY cm.created_at DESC', ['user_id' => $userId]);
 
         return $this->userChatUserDtoFactory->createFromObjects($chatUsers);
     }
 
     /**
-     * @param Uuid $chatId
-     * @param int  $userId
-     *
-     * @return UserChatUserDto|null
+     * @inheritDoc
      */
     public function findOneChatByChatIdAndUserId(Uuid $chatId, int $userId): ?UserChatUserDto
     {

@@ -11,4 +11,6 @@ class UserChatUserDto
     public string $userName;
 
     public string $avatarUrl;
+
+    public ?string $lastMessageText;
 }

@@ -3,7 +3,6 @@
 namespace App\Services\ChatUser\Contracts;
 
 use App\Services\ChatUser\Dtos\UserChatUserDto;
-use Illuminate\Support\Collection;
 
 interface UserChatUserDtoFactoryContract
 {
@@ -15,9 +14,9 @@ interface UserChatUserDtoFactoryContract
     public function createFromObject(object $chatUser): UserChatUserDto;
 
     /**
-     * @param Collection $chatUsers
+     * @param array $chatUsers
      *
      * @return UserChatUserDto[]
      */
-    public function createFromObjects(Collection $chatUsers): array;
+    public function createFromObjects(array $chatUsers): array;
 }
