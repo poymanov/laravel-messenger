@@ -48,7 +48,7 @@ class ChatMessageController extends Controller
             $messageId = $this->chatMessageService->create($dto);
 
             $message = $this->chatMessageService->getOneById($messageId);
-            $messageFormatted = $this->chatMessageDtoFormatter->toArrayByDate($message);
+            $messageFormatted = $this->chatMessageDtoFormatter->toArrayCreated($message);
 
             return response()->json($messageFormatted);
         } catch (ChatMessageChatNotFoundByIdException) {

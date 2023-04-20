@@ -26,15 +26,17 @@ class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
     /**
      * @inheritDoc
      */
-    public function toArrayByDate(ChatMessageDto $dto): array
+    public function toArrayCreated(ChatMessageDto $dto): array
     {
         $date      = $this->formatToDate($dto->createdAt);
         $dateTitle = $this->formatToDateTitle($dto->createdAt);
+        $createdAt = $this->formatToTimestamp($dto->createdAt);
 
         return [
-            'date'    => $date,
-            'title'   => $dateTitle,
-            'message' => $this->toArray($dto),
+            'date'       => $date,
+            'title'      => $dateTitle,
+            'message'    => $this->toArray($dto),
+            'created_at' => $createdAt,
         ];
     }
 
@@ -76,5 +78,15 @@ class ChatMessageDtoFormatter implements ChatMessageDtoFormatterContract
     private function formatToDateTitle(Carbon $date): string
     {
         return $date->format('d F');
+    }
+
+    /**
+     * @param Carbon $date
+     *
+     * @return int
+     */
+    private function formatToTimestamp(Carbon $date): int
+    {
+        return (int)$date->timestamp;
     }
 }

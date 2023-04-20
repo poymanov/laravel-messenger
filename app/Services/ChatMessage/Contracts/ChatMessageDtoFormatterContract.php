@@ -25,5 +25,5 @@ interface ChatMessageDtoFormatterContract
      *
      * @return array
      */
-    public function toArrayByDate(ChatMessageDto $dto): array;
+    public function toArrayCreated(ChatMessageDto $dto): array;
 }

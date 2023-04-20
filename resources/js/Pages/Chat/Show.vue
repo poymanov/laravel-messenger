@@ -45,6 +45,7 @@ function addSentMessage(newMessage) {
 
     const currentChat = usePage().props.chats.find(chat => chat.chat_id === usePage().props.currentChatId);
     currentChat.last_message_text = newMessage.message.text;
+    currentChat.last_message_created_at = newMessage.created_at;
 }
 </script>
 

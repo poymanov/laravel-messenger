@@ -1,6 +1,14 @@
 <script setup>
-    import {usePage, Link } from "@inertiajs/vue3";
-    const currentChatId = usePage().props.currentChatId;
+import {usePage, Link } from "@inertiajs/vue3";
+import {watch} from "vue";
+import {debounce} from "lodash";
+
+const currentChatId = usePage().props.currentChatId;
+
+watch(usePage().props.chats, debounce(() => {
+    usePage().props.chats.sort((itemFirst, itemSecond) =>  itemSecond.last_message_created_at - itemFirst.last_message_created_at);
+}), 300);
+
 </script>
 
 <template>

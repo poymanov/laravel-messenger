@@ -2,6 +2,7 @@
 
 namespace App\Services\ChatUser\Contracts;
 
+use App\Services\ChatUser\Dtos\ChatUserChatInfoDto;
 use App\Services\ChatUser\Dtos\UserChatUserDto;
 use App\Services\ChatUser\Exceptions\CreateUserFailedException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
@@ -36,9 +37,9 @@ interface ChatUserRepositoryContract
      * @param Uuid $chatId
      * @param int  $userId
      *
-     * @return UserChatUserDto|null
+     * @return ChatUserChatInfoDto|null
      */
-    public function findOneChatByChatIdAndUserId(Uuid $chatId, int $userId): ?UserChatUserDto;
+    public function findOneChatByChatIdAndUserId(Uuid $chatId, int $userId): ?ChatUserChatInfoDto;
 
     /**
      * @param int  $userId
