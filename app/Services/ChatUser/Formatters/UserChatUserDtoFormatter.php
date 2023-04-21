@@ -2,6 +2,7 @@
 
 namespace App\Services\ChatUser\Formatters;
 
+use App\Services\ChatMessageStatus\Dtos\ChatMessageStatusNotReadCountDto;
 use App\Services\ChatUser\Contracts\UserChatUserDtoFormatterContract;
 use App\Services\ChatUser\Dtos\UserChatUserDto;
 
@@ -24,8 +25,21 @@ class UserChatUserDtoFormatter implements UserChatUserDtoFormatterContract
     /**
      * @inheritDoc
      */
-    public function fromArrayToArray(array $dtos): array
+    public function fromArrayToArray(array $dtos, array $notReadCounts): array
     {
-        return array_map(fn (UserChatUserDto $dto) => $this->toArray($dto), $dtos);
+        return array_map(function (UserChatUserDto $dto) use ($notReadCounts) {
+            $chat             = $this->toArray($dto);
+            $chat['not_read'] = 0;
+
+            $chatCount = array_filter($notReadCounts, function (ChatMessageStatusNotReadCountDto $countDto) use ($dto) {
+                return $countDto->chatId->equals($dto->chatId);
+            });
+
+            if (count($chatCount) > 0) {
+                $chat['not_read'] = $chatCount[0]->count;
+            }
+
+            return $chat;
+        }, $dtos);
     }
 }

@@ -29,9 +29,14 @@ watch(usePage().props.chats, debounce(() => {
                     <p>{{ chat.username }}</p>
                 </Link>
                 <div class="flex items-center text-sm text-gray-600">
-                    <div class="min-w-0">
+                    <div class="min-w-0 mr-auto">
                         <p class="truncate">{{ chat.last_message_text }}</p>
                     </div>
+                </div>
+            </div>
+            <div v-if="chat.not_read">
+                <div class="bg-blue-700 px-1 py-1 text-sm text-white rounded-full md:block group-hover:block">
+                    {{ chat.not_read }}
                 </div>
             </div>
         </div>
