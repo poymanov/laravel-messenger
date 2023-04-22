@@ -167,3 +167,36 @@ test('success with messages in different days', function () {
                 ]))
         );
 });
+
+/**
+ * Успешный просмотр и непрочитанные статусы сообщений становятся прочитанными
+ */
+test('success with read statuses', function () {
+    $chat = modelBuilderHelper()->chat->create();
+
+    $userCreator = modelBuilderHelper()->user->create();
+    $userMember  = modelBuilderHelper()->user->create();
+
+    modelBuilderHelper()->chatUser->create(['chat_id' => $chat->id, 'user_id' => $userCreator->id]);
+    modelBuilderHelper()->chatUser->create(['chat_id' => $chat->id, 'user_id' => $userMember->id]);
+
+    $message = modelBuilderHelper()->chatMessage->create(
+        ['chat_id' => $chat->id, 'sender_user_id' => $userMember->id, 'text' => fake()->sentence]
+    );
+
+    $chatMessageStatus = modelBuilderHelper()->chatMessageStatus->create([
+        'chat_id'    => $chat->id,
+        'message_id' => $message->id,
+        'user_id'    => $userCreator->id,
+    ]);
+
+    $this->actingAs($userCreator);
+
+    $response = $this->get(routeBuilderHelper()->chat->show($chat->id));
+    $response->assertOk();
+
+    $this->assertDatabaseMissing('chat_message_statuses', [
+        'id'      => $chatMessageStatus->id,
+        'read_at' => null,
+    ]);
+});

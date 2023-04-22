@@ -7,6 +7,7 @@ use App\Services\Chat\Contacts\ChatServiceContract;
 use App\Services\Chat\Factories\CreateChatDtoFactory;
 use App\Services\ChatMessage\Contracts\ChatMessageDtoFormatterContract;
 use App\Services\ChatMessage\Contracts\ChatMessageServiceContract;
+use App\Services\ChatMessageStatus\Contracts\ChatMessageStatusServiceContract;
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +23,8 @@ class ChatController extends Controller
         private readonly CreateChatDtoFactory $createChatDtoFactory,
         private readonly ChatMessageServiceContract $chatMessageService,
         private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter,
-        private readonly ChatUserServiceContract $chatUserService
+        private readonly ChatUserServiceContract $chatUserService,
+        private readonly ChatMessageStatusServiceContract $chatMessageStatusService
     ) {
     }
 
@@ -72,7 +74,23 @@ class ChatController extends Controller
                 return redirect(route('home'));
             }
 
+            $this->chatMessageStatusService->makeReadByChatIdAndUserId($chatId, $authUserId);
+
             Inertia::share('currentChatId', $chatId->value());
+
+            $chats = Inertia::getShared('chats');
+
+            $modifiedChats = [];
+
+            foreach ($chats as $chat) {
+                if ($chat['chat_id'] === $chatId->value()) {
+                    $chat['not_read'] = 0;
+                }
+
+                $modifiedChats[] = $chat;
+            }
+
+            Inertia::share('chats', $modifiedChats);
 
             $messages          = $this->chatMessageService->findAllByChatId($chatId);
             $messagesFormatted = $this->chatMessageDtoFormatter->fromArrayToArray($messages);

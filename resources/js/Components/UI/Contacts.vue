@@ -35,7 +35,7 @@ watch(usePage().props.chats, debounce(() => {
                 </div>
             </div>
             <div v-if="chat.not_read">
-                <div class="bg-blue-700 px-1 py-1 text-sm text-white rounded-full md:block group-hover:block">
+                <div class="bg-blue-700 py-1 px-3 text-sm text-white rounded-full md:block group-hover:block">
                     {{ chat.not_read }}
                 </div>
             </div>
