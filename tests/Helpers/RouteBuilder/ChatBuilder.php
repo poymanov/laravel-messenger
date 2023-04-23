@@ -21,4 +21,14 @@ class ChatBuilder
     {
         return '/chats/' . $id;
     }
+
+    /**
+     * @param string $id
+     *
+     * @return string
+     */
+    public function delete(string $id): string
+    {
+        return '/chats/' . $id;
+    }
 }

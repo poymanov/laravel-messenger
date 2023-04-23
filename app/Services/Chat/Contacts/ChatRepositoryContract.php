@@ -6,6 +6,7 @@ use App\Services\Chat\Dtos\ChatDto;
 use App\Services\Chat\Exceptions\ChatNotFoundByIdException;
 use App\Services\Chat\Exceptions\CreateChatFailedException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
+use Throwable;
 
 interface ChatRepositoryContract
 {
@@ -22,6 +23,15 @@ interface ChatRepositoryContract
      * @throws ChatNotFoundByIdException
      */
     public function getById(Uuid $id): ChatDto;
+
+    /**
+     * @param Uuid $id
+     *
+     * @return void
+     * @throws ChatNotFoundByIdException
+     * @throws Throwable
+     */
+    public function delete(Uuid $id);
 
     /**
      * @param Uuid $id

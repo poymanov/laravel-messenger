@@ -8,9 +8,11 @@ use App\Services\Chat\Contacts\ChatServiceContract;
 use App\Services\Chat\Contacts\ChatShowProcessResultDtoFactoryContract;
 use App\Services\Chat\Contacts\ChatShowServiceContract;
 use App\Services\Chat\Contacts\CreateChatDtoFactoryContract;
+use App\Services\Chat\Contacts\DeleteChatDtoFactoryContract;
 use App\Services\Chat\Factories\ChatDtoFactory;
 use App\Services\Chat\Factories\ChatShowProcessResultDtoFactory;
 use App\Services\Chat\Factories\CreateChatDtoFactory;
+use App\Services\Chat\Factories\DeleteChatDtoFactory;
 use App\Services\Chat\Repositories\ChatRepository;
 use App\Services\Chat\Services\ChatService;
 use App\Services\Chat\Services\ChatShowService;
@@ -29,5 +31,6 @@ class ChatServiceProvider extends ServiceProvider
         $this->app->singleton(ChatDtoFactoryContract::class, ChatDtoFactory::class);
         $this->app->singleton(ChatShowProcessResultDtoFactoryContract::class, ChatShowProcessResultDtoFactory::class);
         $this->app->singleton(ChatShowServiceContract::class, ChatShowService::class);
+        $this->app->singleton(DeleteChatDtoFactoryContract::class, DeleteChatDtoFactory::class);
     }
 }

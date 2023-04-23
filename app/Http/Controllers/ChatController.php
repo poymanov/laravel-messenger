@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Chat\StoreRequest;
 use App\Services\Chat\Contacts\ChatServiceContract;
 use App\Services\Chat\Contacts\ChatShowServiceContract;
+use App\Services\Chat\Contacts\DeleteChatDtoFactoryContract;
 use App\Services\Chat\Exceptions\ChatDataNotFoundByChatIdAndUserIdException;
 use App\Services\Chat\Exceptions\ChatNotFoundByIdException;
+use App\Services\Chat\Exceptions\DeleteChatNotMemberException;
 use App\Services\Chat\Factories\CreateChatDtoFactory;
 use App\Services\ChatMessage\Contracts\ChatMessageDtoFormatterContract;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +24,8 @@ class ChatController extends Controller
         private readonly ChatServiceContract $chatService,
         private readonly CreateChatDtoFactory $createChatDtoFactory,
         private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter,
-        private readonly ChatShowServiceContract $chatShowService
+        private readonly ChatShowServiceContract $chatShowService,
+        private readonly DeleteChatDtoFactoryContract $deleteChatDtoFactory
     ) {
     }
 
@@ -71,6 +74,33 @@ class ChatController extends Controller
                 'messages'   => $messagesFormatted,
             ]);
         } catch (ChatNotFoundByIdException|ChatDataNotFoundByChatIdAndUserIdException) {
+            return redirect(route('home'));
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws ChatNotFoundByIdException
+     * @throws DeleteChatNotMemberException
+     * @throws Throwable
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $authUserId = $this->getAuthUserId(request());
+            $chatId     = Uuid::make($id);
+
+            $dto = $this->deleteChatDtoFactory->createFromParams($chatId, $authUserId);
+
+            $this->chatService->delete($dto);
+
+            return redirect(route('home'));
+        } catch (ChatNotFoundByIdException|DeleteChatNotMemberException) {
             return redirect(route('home'));
         } catch (Throwable $e) {
             Log::error($e->getMessage());

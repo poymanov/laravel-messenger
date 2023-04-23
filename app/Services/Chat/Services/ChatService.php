@@ -6,7 +6,10 @@ use App\Services\Chat\Contacts\ChatRepositoryContract;
 use App\Services\Chat\Contacts\ChatServiceContract;
 use App\Services\Chat\Dtos\ChatDto;
 use App\Services\Chat\Dtos\CreateChatDto;
+use App\Services\Chat\Dtos\DeleteChatDto;
+use App\Services\Chat\Exceptions\ChatNotFoundByIdException;
 use App\Services\Chat\Exceptions\CreateChatUserNotFoundException;
+use App\Services\Chat\Exceptions\DeleteChatNotMemberException;
 use App\Services\ChatUser\Contracts\ChatUserServiceContract;
 use App\Services\Users\Contracts\UserServiceContract;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +67,24 @@ class ChatService implements ChatServiceContract
         }
 
         return $chatId;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(DeleteChatDto $dto): void
+    {
+        // Если чат не существует
+        if (!$this->chatRepository->isExistsById($dto->chatId)) {
+            throw new ChatNotFoundByIdException($dto->chatId);
+        }
+
+        // Если пользователь - не участник чата
+        if (!$this->chatUserService->isChatMember($dto->userId, $dto->chatId)) {
+            throw new DeleteChatNotMemberException($dto->chatId, $dto->userId);
+        }
+
+        $this->chatRepository->delete($dto->chatId);
     }
 
     /**

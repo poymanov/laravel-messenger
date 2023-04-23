@@ -39,6 +39,7 @@ Route::group([
 ], function () {
     Route::post('', 'store')->name('store');
     Route::get('{id}', 'show')->name('show');
+    Route::delete('{id}', 'destroy')->name('destroy');
 });
 
 Route::group([

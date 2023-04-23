@@ -4,8 +4,10 @@ namespace App\Services\Chat\Contacts;
 
 use App\Services\Chat\Dtos\ChatDto;
 use App\Services\Chat\Dtos\CreateChatDto;
+use App\Services\Chat\Dtos\DeleteChatDto;
 use App\Services\Chat\Exceptions\ChatNotFoundByIdException;
 use App\Services\Chat\Exceptions\CreateChatUserNotFoundException;
+use App\Services\Chat\Exceptions\DeleteChatNotMemberException;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
 interface ChatServiceContract
@@ -17,6 +19,15 @@ interface ChatServiceContract
      * @throws CreateChatUserNotFoundException
      */
     public function create(CreateChatDto $createChatDto): Uuid;
+
+    /**
+     * @param DeleteChatDto $dto
+     *
+     * @return void
+     * @throws ChatNotFoundByIdException
+     * @throws DeleteChatNotMemberException
+     */
+    public function delete(DeleteChatDto $dto): void;
 
     /**
      * @param Uuid $id

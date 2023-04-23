@@ -37,13 +37,33 @@ class ChatRepository implements ChatRepositoryContract
      */
     public function getById(Uuid $id): ChatDto
     {
+        return $this->chatDtoFactory->createFromModel($this->getModelById($id));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(Uuid $id)
+    {
+        $model = $this->getModelById($id);
+        $model->deleteOrFail();
+    }
+
+    /**
+     * @param Uuid $id
+     *
+     * @return Chat
+     * @throws ChatNotFoundByIdException
+     */
+    private function getModelById(Uuid $id): Chat
+    {
         $chat = Chat::whereId($id->value())->first();
 
         if (is_null($chat)) {
             throw new ChatNotFoundByIdException($id);
         }
 
-        return $this->chatDtoFactory->createFromModel($chat);
+        return $chat;
     }
 
     /**
