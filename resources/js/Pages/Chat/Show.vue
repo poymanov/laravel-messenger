@@ -1,13 +1,19 @@
 <script setup>
 import MessengerLayout from '@/Layouts/MessengerLayout.vue';
 import NewMessage from '@/Components/Chat/NewMessage.vue';
-import {usePage, Head} from "@inertiajs/vue3";
+import {usePage, Head, Link} from "@inertiajs/vue3";
 import MessagesList from '@/Components/Chat/MessagesList.vue';
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch, computed} from "vue";
 import {debounce} from "lodash";
+import Modal from '@/Components/UI/Modal.vue';
+import DangerButton from '@/Components/UI/DangerButton.vue';
 
 const props = defineProps({
     username: {
+        type: String,
+        required: true
+    },
+    email: {
         type: String,
         required: true
     },
@@ -22,6 +28,14 @@ const props = defineProps({
 });
 
 const chatBody = ref(null);
+const showModal = ref(false);
+const currentChatId = usePage().props.currentChatId;
+
+const userProfileAvatarUrl = computed(() => {
+    const avatarUrl = new URL(props.avatar_url);
+    avatarUrl.search = 's=200';
+    return avatarUrl;
+});
 
 onMounted(() => {
     chatBody.value.scrollTop = chatBody.value.scrollHeight;
@@ -29,8 +43,8 @@ onMounted(() => {
 
 watch(props.messages, debounce(() => {
     let items = document.getElementsByClassName('chat-message');
-    let lastItem = items[items.length-1];
-    lastItem.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    let lastItem = items[items.length - 1];
+    lastItem.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 }), 300);
 
 function addSentMessage(newMessage) {
@@ -47,6 +61,15 @@ function addSentMessage(newMessage) {
     currentChat.last_message_text = newMessage.message.text;
     currentChat.last_message_created_at = newMessage.created_at;
 }
+
+function closeModal() {
+    showModal.value = false;
+}
+
+function openModal() {
+    showModal.value = true;
+}
+
 </script>
 
 <template>
@@ -59,7 +82,7 @@ function addSentMessage(newMessage) {
                     <img class="shadow-md rounded-full w-full h-full object-cover" :src="avatar_url" alt="">
                 </div>
                 <div class="text-sm">
-                    <p class="font-bold">{{ username }}</p>
+                    <p class="font-bold cursor-pointer" @click="openModal">{{ username }}</p>
                 </div>
             </div>
         </div>
@@ -73,5 +96,37 @@ function addSentMessage(newMessage) {
                 </div>
             </div>
         </div>
+
+        <Modal :show="showModal" maxWidth="md" @close="closeModal">
+            <div class="p-6">
+                <div class="flex mb-2">
+                    <div class="w-20 h-20 mr-4 relative flex flex-shrink-0">
+                        <img class="shadow-md rounded-full w-full h-full object-cover" :src="userProfileAvatarUrl" alt="">
+                    </div>
+                    <div class="text-lg">
+                        <p class="font-bold cursor-pointer" @click="openModal">{{ username }}</p>
+                    </div>
+                </div>
+                <div class="py-2">
+                    <hr>
+                </div>
+                <div>
+                    <b>Email:</b> {{ email }}
+                </div>
+                <div class="py-2">
+                    <hr>
+                </div>
+                <div class="py-2">
+                    <DangerButton>
+                        <Link
+                            :href="route('chats.destroy', currentChatId)"
+                            method="delete"
+                            as="button">
+                            Delete Chat
+                        </Link>
+                    </DangerButton>
+                </div>
+            </div>
+        </Modal>
     </MessengerLayout>
 </template>

@@ -11,4 +11,6 @@ class ChatUserChatInfoDto
     public string $userName;
 
     public string $avatarUrl;
+
+    public string $email;
 }

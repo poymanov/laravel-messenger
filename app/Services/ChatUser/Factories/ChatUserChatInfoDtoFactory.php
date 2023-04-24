@@ -18,10 +18,11 @@ class ChatUserChatInfoDtoFactory implements ChatUserChatInfoDtoFactoryContract
      */
     public function createFromObject(object $chatUser): ChatUserChatInfoDto
     {
-        $dto                       = new ChatUserChatInfoDto();
-        $dto->chatId               = Uuid::make($chatUser->chat_id); // @phpstan-ignore-line
-        $dto->userName             = $chatUser->name; // @phpstan-ignore-line
-        $dto->avatarUrl            = $this->userAvatarService->getGravatarUrl($chatUser->email); // @phpstan-ignore-line
+        $dto            = new ChatUserChatInfoDto();
+        $dto->chatId    = Uuid::make($chatUser->chat_id); // @phpstan-ignore-line
+        $dto->userName  = $chatUser->name; // @phpstan-ignore-line
+        $dto->avatarUrl = $this->userAvatarService->getGravatarUrl($chatUser->email); // @phpstan-ignore-line
+        $dto->email     = $chatUser->email; // @phpstan-ignore-line;
 
         return $dto;
     }

@@ -70,6 +70,7 @@ class ChatController extends Controller
 
             return Inertia::render('Chat/Show', [
                 'username'   => $result->chatData->userName,
+                'email'      => $result->chatData->email,
                 'avatar_url' => $result->chatData->avatarUrl,
                 'messages'   => $messagesFormatted,
             ]);
