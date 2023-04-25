@@ -3,6 +3,8 @@
 namespace App\Services\Users\Contracts;
 
 use App\Services\Users\Dtos\UserDto;
+use App\Services\Users\Exceptions\UserNotFoundByIdException;
+use Throwable;
 
 interface UserServiceContract
 {
@@ -19,4 +21,21 @@ interface UserServiceContract
      * @return bool
      */
     public function isExistsById(int $id): bool;
+
+    /**
+     * @param int  $id
+     * @param bool $isOnline
+     *
+     * @return void
+     */
+    public function updateOnlineStatus(int $id, bool $isOnline): void;
+
+    /**
+     * @param int    $id
+     *
+     * @return void
+     * @throws Throwable
+     * @throws UserNotFoundByIdException
+     */
+    public function updateLastActivity(int $id): void;
 }

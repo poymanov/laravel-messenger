@@ -22,6 +22,16 @@ it('users can authenticate using the login screen', function () {
 
     $this->assertAuthenticated();
     $response->assertRedirect(RouteServiceProvider::HOME);
+
+    $this->assertDatabaseHas('users', [
+        'id' => $user->id,
+        'is_online' => true,
+    ]);
+
+    $this->assertDatabaseMissing('users', [
+        'id' => $user->id,
+        'last_activity_at' => null,
+    ]);
 });
 
 it('users can not authenticate with invalid password', function () {

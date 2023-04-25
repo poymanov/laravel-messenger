@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
+use App\Services\Users\Contracts\UserServiceContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,11 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
+    public function __construct(private readonly UserServiceContract $userService)
+    {
+    }
+
+
     /**
      * Display the login view.
      */
@@ -21,7 +27,7 @@ class AuthenticatedSessionController extends Controller
     {
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
+            'status'           => session('status'),
         ]);
     }
 
@@ -34,6 +40,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $authUserId = $this->getAuthUserId($request);
+
+        $this->userService->updateOnlineStatus($authUserId, true);
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -42,6 +52,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $authUserId = $this->getAuthUserId($request);
+
+        $this->userService->updateOnlineStatus($authUserId, false);
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
