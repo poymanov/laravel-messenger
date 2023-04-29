@@ -9,16 +9,8 @@ import Modal from '@/Components/UI/Modal.vue';
 import DangerButton from '@/Components/UI/DangerButton.vue';
 
 const props = defineProps({
-    username: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    avatar_url: {
-        type: String,
+    user: {
+        type: Object,
         required: true
     },
     messages: {
@@ -32,9 +24,21 @@ const showModal = ref(false);
 const currentChatId = usePage().props.currentChatId;
 
 const userProfileAvatarUrl = computed(() => {
-    const avatarUrl = new URL(props.avatar_url);
+    const avatarUrl = new URL(props.user.avatar_url);
     avatarUrl.search = 's=200';
     return avatarUrl;
+});
+
+const userStatus = computed(() => {
+    if (props.user.is_online) {
+        return 'Online';
+    }
+
+    if (props.user.last_activity_at) {
+        return 'Active ' + props.user.last_activity_at;
+    }
+
+    return 'Not active yet';
 });
 
 onMounted(() => {
@@ -73,16 +77,17 @@ function openModal() {
 </script>
 
 <template>
-    <Head :title="`Chat with ` + username"/>
+    <Head :title="`Chat with ` + user.name"/>
 
     <MessengerLayout>
         <div class="chat-header text-black px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div class="flex">
                 <div class="w-12 h-12 mr-4 relative flex flex-shrink-0">
-                    <img class="shadow-md rounded-full w-full h-full object-cover" :src="avatar_url" alt="">
+                    <img class="shadow-md rounded-full w-full h-full object-cover" :src="user.avatar_url" alt="">
                 </div>
                 <div class="text-sm">
-                    <p class="font-bold cursor-pointer" @click="openModal">{{ username }}</p>
+                    <p class="font-bold cursor-pointer" @click="openModal">{{ user.name }}</p>
+                    <p>{{ userStatus }}</p>
                 </div>
             </div>
         </div>
@@ -104,14 +109,15 @@ function openModal() {
                         <img class="shadow-md rounded-full w-full h-full object-cover" :src="userProfileAvatarUrl" alt="">
                     </div>
                     <div class="text-lg">
-                        <p class="font-bold cursor-pointer" @click="openModal">{{ username }}</p>
+                        <p class="font-bold cursor-pointer" @click="openModal">{{ user.name }}</p>
+                        <p>{{ userStatus }}</p>
                     </div>
                 </div>
                 <div class="py-2">
                     <hr>
                 </div>
                 <div>
-                    <b>Email:</b> {{ email }}
+                    <b>Email:</b> {{ user.email }}
                 </div>
                 <div class="py-2">
                     <hr>

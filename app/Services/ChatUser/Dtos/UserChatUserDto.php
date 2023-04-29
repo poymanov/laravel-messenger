@@ -16,4 +16,6 @@ class UserChatUserDto
     public ?string $lastMessageText;
 
     public ?DateTime $lastMessageCreatedAt;
+
+    public bool $isOnline;
 }

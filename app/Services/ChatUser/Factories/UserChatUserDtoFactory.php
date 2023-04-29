@@ -25,6 +25,7 @@ class UserChatUserDtoFactory implements UserChatUserDtoFactoryContract
         $dto->avatarUrl            = $this->userAvatarService->getGravatarUrl($chatUser->email); // @phpstan-ignore-line
         $dto->lastMessageText      = $chatUser->last_message_text ?? null;
         $dto->lastMessageCreatedAt = isset($chatUser->last_message_created_at) ? new DateTime($chatUser->last_message_created_at) : null;
+        $dto->isOnline             = $chatUser->is_online; // @phpstan-ignore-line
 
         return $dto;
     }

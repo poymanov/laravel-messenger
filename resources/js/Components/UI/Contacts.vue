@@ -23,6 +23,9 @@ watch(usePage().props.chats, debounce(() => {
                      :src="chat.avatar_url"
                      alt=""
                 />
+                <div v-if="chat.is_online" class="absolute p-1 rounded-full bottom-0 right-0">
+                    <div class="bg-green-500 rounded-full w-3 h-3"></div>
+                </div>
             </div>
             <div class="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
                 <Link :href="route('chats.show', {'id': chat.chat_id})">

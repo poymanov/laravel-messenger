@@ -19,6 +19,7 @@ class UserChatUserDtoFormatter implements UserChatUserDtoFormatterContract
             'avatar_url'              => $dto->avatarUrl,
             'last_message_text'       => $dto->lastMessageText,
             'last_message_created_at' => $dto->lastMessageCreatedAt?->getTimestamp(),
+            'is_online'               => $dto->isOnline,
         ];
     }
 

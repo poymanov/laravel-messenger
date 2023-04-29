@@ -57,7 +57,7 @@ class ChatUserRepository implements ChatUserRepositoryContract
     public function findAllChatsByUserId(int $userId): array
     {
         $chatUsers = DB::select(
-            'SELECT cu1.chat_id, u.name, u.email, cm.text as last_message_text, cm.created_at as last_message_created_at
+            'SELECT cu1.chat_id, u.name, u.email, cm.text as last_message_text, cm.created_at as last_message_created_at, u.is_online
 FROM chat_users cu1
 JOIN chat_users as cu2 ON cu1.chat_id = cu2.chat_id
 JOIN users as u ON cu2.user_id = u.id
@@ -78,7 +78,7 @@ ORDER BY cm.created_at DESC',
         $chatUser = DB::table('chat_users', 'cu1')
             ->join('chat_users as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
             ->join('users as u', 'cu2.user_id', '=', 'u.id')
-            ->select(['cu1.chat_id', 'u.name', 'u.email'])
+            ->select(['cu1.chat_id', 'u.name', 'u.email', 'u.is_online', 'u.last_activity_at'])
             ->where(['cu1.user_id' => $userId])
             ->whereNot(['cu2.user_id' => $userId])
             ->where(['cu1.chat_id' => $chatId->value()])

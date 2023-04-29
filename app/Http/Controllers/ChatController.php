@@ -69,10 +69,14 @@ class ChatController extends Controller
             $messagesFormatted = $this->chatMessageDtoFormatter->fromArrayToArray($result->messages);
 
             return Inertia::render('Chat/Show', [
-                'username'   => $result->chatData->userName,
-                'email'      => $result->chatData->email,
-                'avatar_url' => $result->chatData->avatarUrl,
-                'messages'   => $messagesFormatted,
+                'user'     => [
+                    'name'         => $result->chatData->userName,
+                    'email'            => $result->chatData->email,
+                    'avatar_url'       => $result->chatData->avatarUrl,
+                    'is_online'        => $result->chatData->isOnline,
+                    'last_activity_at' => $result->chatData->lastActivityAt?->diffForHumans(),
+                ],
+                'messages' => $messagesFormatted,
             ]);
         } catch (ChatNotFoundByIdException|ChatDataNotFoundByChatIdAndUserIdException) {
             return redirect(route('home'));
