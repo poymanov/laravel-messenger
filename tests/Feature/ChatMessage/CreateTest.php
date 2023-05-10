@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\Chat\NewMessage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -58,6 +59,8 @@ test('another users chat', function () {
  * Успешное создание сообщения
  */
 test('success', function () {
+    Event::fake();
+
     $chat = modelBuilderHelper()->chat->create();
 
     $userCreator = modelBuilderHelper()->user->create();
@@ -93,4 +96,6 @@ test('success', function () {
         'user_id' => $userMember->id,
         'read_at' => null,
     ]);
+
+    Event::dispatched(NewMessage::class);
 });

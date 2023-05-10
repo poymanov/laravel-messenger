@@ -3,7 +3,7 @@ import MessengerLayout from '@/Layouts/MessengerLayout.vue';
 import NewMessage from '@/Components/Chat/NewMessage.vue';
 import {usePage, Head, Link} from "@inertiajs/vue3";
 import MessagesList from '@/Components/Chat/MessagesList.vue';
-import {onMounted, ref, watch, computed} from "vue";
+import {onMounted, onUnmounted, ref, watch, computed} from "vue";
 import {debounce} from "lodash";
 import Modal from '@/Components/UI/Modal.vue';
 import DangerButton from '@/Components/UI/DangerButton.vue';
@@ -22,6 +22,7 @@ const props = defineProps({
 const chatBody = ref(null);
 const showModal = ref(false);
 const currentChatId = usePage().props.currentChatId;
+const websocketChatChannel = `chat.${currentChatId}`;
 
 const userProfileAvatarUrl = computed(() => {
     const avatarUrl = new URL(props.user.avatar_url);
@@ -43,15 +44,25 @@ const userStatus = computed(() => {
 
 onMounted(() => {
     chatBody.value.scrollTop = chatBody.value.scrollHeight;
+
+    Echo
+        .private(websocketChatChannel)
+        .listen('.new-message', (newMessage) => {
+        addNewMessage(newMessage);
+    });
+});
+
+onUnmounted(() => {
+    Echo.leaveChannel(websocketChatChannel);
 });
 
 watch(props.messages, debounce(() => {
     let items = document.getElementsByClassName('chat-message');
     let lastItem = items[items.length - 1];
     lastItem.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
-}), 300);
+}, 300));
 
-function addSentMessage(newMessage) {
+function addNewMessage(newMessage) {
     if (newMessage.date in props.messages) {
         props.messages[newMessage.date].messages.push(newMessage.message);
     } else {
@@ -97,7 +108,7 @@ function openModal() {
         <div class="chat-footer flex-none">
             <div class="flex flex-row items-center p-4">
                 <div class="relative flex-grow">
-                    <NewMessage @messageAdded="addSentMessage" :current-chat-id="usePage().props.currentChatId"/>
+                    <NewMessage @messageAdded="addNewMessage" :current-chat-id="usePage().props.currentChatId"/>
                 </div>
             </div>
         </div>

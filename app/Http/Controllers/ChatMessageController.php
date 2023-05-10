@@ -20,7 +20,7 @@ class ChatMessageController extends Controller
         private readonly ChatUserServiceContract $chatUserService,
         private readonly ChatMessageCreateDtoFactory $chatMessageCreateDtoFactory,
         private readonly ChatMessageServiceContract $chatMessageService,
-        private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter
+        private readonly ChatMessageDtoFormatterContract $chatMessageDtoFormatter,
     ) {
     }
 
