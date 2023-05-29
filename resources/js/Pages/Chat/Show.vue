@@ -49,6 +49,7 @@ onMounted(() => {
         .private(websocketChatChannel)
         .listen('.new-message', (newMessage) => {
         addNewMessage(newMessage);
+        makeChatRead()
     });
 });
 
@@ -75,6 +76,12 @@ function addNewMessage(newMessage) {
     const currentChat = usePage().props.chats.find(chat => chat.chat_id === usePage().props.currentChatId);
     currentChat.last_message_text = newMessage.message.text;
     currentChat.last_message_created_at = newMessage.created_at;
+}
+
+function makeChatRead() {
+    const url = route('chat-message-statuses.make-chat-read', {'chat_id': usePage().props.currentChatId });
+
+    axios.post(url).catch(error => console.log(error.message));
 }
 
 function closeModal() {

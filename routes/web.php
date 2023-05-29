@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\ChatMessageStatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -49,6 +50,15 @@ Route::group([
     'middleware' => 'auth',
 ], function () {
     Route::post('', 'store')->name('store');
+});
+
+Route::group([
+    'prefix'     => 'chat-message-statuses',
+    'as'         => 'chat-message-statuses.',
+    'controller' => ChatMessageStatusController::class,
+    'middleware' => 'auth',
+], function () {
+    Route::post('make-chat-read', 'makeChatRead')->name('make-chat-read');
 });
 
 require __DIR__ . '/auth.php';
