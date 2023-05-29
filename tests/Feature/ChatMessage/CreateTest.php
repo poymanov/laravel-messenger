@@ -1,6 +1,7 @@
 <?php
 
-use App\Events\Chat\NewMessage;
+use App\Events\Chat\NewMessageForUser;
+use App\Events\Chat\NewMessageInChat;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -97,5 +98,6 @@ test('success', function () {
         'read_at' => null,
     ]);
 
-    Event::dispatched(NewMessage::class);
+    Event::dispatched(NewMessageInChat::class);
+    Event::dispatched(NewMessageForUser::class);
 });

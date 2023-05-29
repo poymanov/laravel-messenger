@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use MichaelRubel\ValueObjects\Collection\Complex\Uuid;
 
-class NewMessage implements ShouldBroadcast
+class NewMessageInChat implements ShouldBroadcast
 {
     use Dispatchable;
     use InteractsWithSockets;

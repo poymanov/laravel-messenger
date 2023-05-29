@@ -2,7 +2,8 @@
 
 namespace App\Services\ChatMessage\Services;
 
-use App\Events\Chat\NewMessage;
+use App\Events\Chat\NewMessageForUser;
+use App\Events\Chat\NewMessageInChat;
 use App\Services\Chat\Contacts\ChatServiceContract;
 use App\Services\ChatMessage\Contracts\ChatMessageRepositoryContract;
 use App\Services\ChatMessage\Contracts\ChatMessageServiceContract;
@@ -52,9 +53,11 @@ class ChatMessageService implements ChatMessageServiceContract
 
                 $createDto = $this->chatMessageStatusCreateDtoFactory->createFromParams($dto->chatId, $messageId, $chatMember);
                 $this->chatMessageStatusService->create($createDto);
+
+                $this->broadcastService->event(new NewMessageForUser($chatMember, $messageId));
             }
 
-            $this->broadcastService->event(new NewMessage($dto->chatId, $messageId))->toOthers();
+            $this->broadcastService->event(new NewMessageInChat($dto->chatId, $messageId))->toOthers();
 
             DB::commit();
         } catch (Throwable $e) {

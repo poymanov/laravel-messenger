@@ -21,3 +21,7 @@ Broadcast::channel('chat.{id}', function ($user, $id) {
 
     return $chatUserService->isChatMember((int)$user->id, $chatId);
 });
+
+Broadcast::channel('user.{id}', function ($user, $id) {
+    return (int)$user->id === (int) $id;
+});

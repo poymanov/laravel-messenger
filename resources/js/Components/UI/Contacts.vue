@@ -1,13 +1,35 @@
 <script setup>
 import {usePage, Link } from "@inertiajs/vue3";
-import {watch} from "vue";
+import {onMounted, onUnmounted, watch} from "vue";
 import {debounce} from "lodash";
 
 const currentChatId = usePage().props.currentChatId;
+const currentAuthUserId = usePage().props.auth.user.id;
+const websocketChatChannel = `user.${currentAuthUserId}`;
 
 watch(usePage().props.chats, debounce(() => {
     usePage().props.chats.sort((itemFirst, itemSecond) =>  itemSecond.last_message_created_at - itemFirst.last_message_created_at);
 }), 300);
+
+onMounted(() => {
+    Echo
+        .private(websocketChatChannel)
+        .listen('.new-message', (newMessage) => {
+            const newMessageChatId = newMessage.message.chat_id;
+            if (currentChatId === newMessageChatId) {
+                return;
+            }
+
+            const newMessageChats = usePage().props.chats.filter(chat => chat.chat_id === newMessageChatId);
+
+            if (newMessageChats.length === 0) {
+                return;
+            }
+
+            newMessageChats[0].not_read++;
+            newMessageChats[0].last_message_text = newMessage.message.text;
+        });
+});
 
 </script>
 
