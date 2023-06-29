@@ -14,4 +14,4 @@ make down
 
 ---
 
-[<< Настройки](../03-settings/README.md) | [Запуск >>](../05-registration/README.md) | [**К оглавлению**](../README.md)
+[<< Настройки](../03-settings/README.md) | [Регистрация >>](../05-registration/README.md) | [**К оглавлению**](../README.md)
