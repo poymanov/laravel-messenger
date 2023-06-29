@@ -6,3 +6,7 @@
 ```
 make init
 ```
+
+---
+
+[<< Введение](../01-intro/README.md) | [Настройки >>](../03-settings/README.md) | [**К оглавлению**](../README.md)

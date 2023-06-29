@@ -19,4 +19,8 @@ http://localhost:8080/register
 
 ![](img/02.png)
 
+---
+
+[<< Запуск](../04-start/README.md) | [Аутентификация >>](../06-login/README.md) | [**К оглавлению**](../README.md)
+
 

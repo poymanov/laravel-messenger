@@ -20,3 +20,7 @@ PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 PUSHER_APP_CLUSTER=
 ```
+
+---
+
+[<< Установка](../02-setup/README.md) | [Регистрация >>](../04-start/README.md) | [**К оглавлению**](../README.md)

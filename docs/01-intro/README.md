@@ -12,3 +12,5 @@
 Приложение создано в рамках курса [Laravel 10 Vue 3 Inertia SPA Вебсокет чат](https://laravelcreative.ru/course/4).
 
 ---
+
+[Установка >>](../02-setup/README.md) | [**К оглавлению**](../README.md)
