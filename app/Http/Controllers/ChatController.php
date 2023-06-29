@@ -70,13 +70,13 @@ class ChatController extends Controller
 
             return Inertia::render('Chat/Show', [
                 'user'     => [
-                    'name'         => $result->chatData->userName,
+                    'name'             => $result->chatData->userName,
                     'email'            => $result->chatData->email,
                     'avatar_url'       => $result->chatData->avatarUrl,
                     'is_online'        => $result->chatData->isOnline,
                     'last_activity_at' => $result->chatData->lastActivityAt?->diffForHumans(),
                 ],
-                'messages' => $messagesFormatted,
+                'messages' => $messagesFormatted ?: ['' => ''],
             ]);
         } catch (ChatNotFoundByIdException|ChatDataNotFoundByChatIdAndUserIdException) {
             return redirect(route('home'));
